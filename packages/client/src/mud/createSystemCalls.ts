@@ -1,14 +1,17 @@
-import { getComponentValue } from "@latticexyz/recs";
-import { uuid, awaitStreamValue } from "@latticexyz/utils";
+import { Entity, getComponentValue } from "@latticexyz/recs";
+import { Has, HasValue, runQuery } from "@latticexyz/recs";
+import { uuid, awaitStreamValue, hexToArray } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
-import { max_width, max_height, map_height, map_width } from "../constant";
+import { max_width, max_height, map_height, map_width, parcel_width, parcel_height, TerrainType } from "../constant";
+
+import { utils } from "ethers";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { singletonEntity, playerEntity, worldSend, txReduced$ }: SetupNetworkResult,
-  { PlayerPosition, Player }: ClientComponents
+  { PlayerPosition, Player, MapConfig, ParcelTerrain, Obstruction }: ClientComponents
 ) {
 
   // comply with LibMap.distance
@@ -26,7 +29,36 @@ export function createSystemCalls(
 
   // TODO: do it according to LibMap.isObstruction()
   const isObstructed = (x: number, y: number) => {
-    return false;
+
+    const map_matrix = [...MapConfig.values.parcelTypes.entries()].map(v=>v[1]);
+    const parcel2map_x = Math.floor(x / parcel_width);
+    const parcel2map_y = Math.floor(y / parcel_height);
+    const parcel_x = x % parcel_width;
+    const parcel_y = y % parcel_height;
+    // const bytes32Value = `0x${map_matrix[parcel2map_y][parcel2map_x].toString(16).padStart(2, '0')}`;
+    // const terrainMap = getComponentValue(ParcelTerrain, bytes32Value as Entity)?.value
+
+    // const terrainValues: number[][] = Array.from({ length: parcel_width }, () =>
+    // Array.from({ length: parcel_height }, () => 0)
+    // );
+    // Array.from(hexToArray(terrainMap as string)).forEach((value, index) => {
+    //   const x = index % parcel_width;
+    //   const y = Math.floor(index / parcel_width);
+    //   terrainValues[y][x] = value
+    // });
+
+    // return terrainValues[parcel_y][parcel_x] as TerrainType == TerrainType.TREE;
+    
+
+    //大概是需要HasValue联合查询出位置的entityId然后才能找到Obstruction的记录，由于没有记录Position所以不行？
+    //runQuery([Has(Obstruction), HasValue(Position, { x, y })]).size > 0;
+
+
+    //需要自己拼entityId
+    const obEntity = `0x${map_matrix[parcel2map_y][parcel2map_x].toString(16).padStart(64, '0')}${parcel_x.toString(16).padStart(64, '0')}${parcel_y.toString(16).padStart(64, '0')}`;
+    const ob = getComponentValue(Obstruction, utils.keccak256(obEntity) as Entity)?.value
+    return ob;
+
   };
 
   const crawlTo = async (x: number, y: number) => {
