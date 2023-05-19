@@ -13,14 +13,13 @@ export const RenderMap = () => {
   const {
     components: { MapConfig, ParcelTerrain, PlayerPosition},
     network: { playerEntity },
+    systemCalls: { wrapParcel2Map },
   } = useMUD();
 
   const hasPlayer = playerEntity !== undefined;
   const hasPlayerPosition = hasPlayer ? getComponentValue(PlayerPosition, playerEntity) !== undefined : false
   const playerPosition = useComponentValue(PlayerPosition, playerEntity) // : {x:0, y:0};
 
-
-  
   // --------- get player's coord on map: 1 absolute coord -> 2 x relative ---------
   const coordMapToParcel = (map_x: number, map_y: number) => {
     const parcel2map_x = Math.floor(map_x / parcel_width);
@@ -76,15 +75,16 @@ export const RenderMap = () => {
     return `0x${number.toString(16).padStart(2, '0')}`;
   }
 
-  // TODO: move functions to systemCall?
   const map_screen_terrainMaps = map_screen.map(row => row.map((coord)=>{
-    const parcelType = map_matrix[coord.y][coord.x];
-    const parcelID = getParcelID(coord.x, coord.y, parcelType);
+    const [wrappedX, wrappedY] = wrapParcel2Map(coord.x, coord.y);
+    console.log(wrappedX, wrappedY)
+    const parcelType = map_matrix[wrappedY][wrappedX];
+    const parcelID = getParcelID(wrappedX, wrappedY, parcelType);
     const terrainMap = getComponentValue(ParcelTerrain, parcelID as Entity)?.value
     return terrainMap
   }))
 
-  console.log(map_screen_terrainMaps)
+  console.log("map_screen_terrainMaps", map_screen_terrainMaps)
 
   return (
   <>

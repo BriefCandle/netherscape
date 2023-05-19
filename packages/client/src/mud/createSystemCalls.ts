@@ -2,7 +2,7 @@ import { getComponentValue } from "@latticexyz/recs";
 import { uuid, awaitStreamValue } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
-import { max_width, max_height } from "../constant";
+import { max_width, max_height, map_height, map_width } from "../constant";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -18,7 +18,13 @@ export function createSystemCalls(
     return [wrappedX, wrappedY]
   }
 
-  // TODO: get it according to LibMap.isObstruction()
+  const wrapParcel2Map = (x: number, y: number) => {
+    const wrappedX = x < 0 ? map_width - 1: (x > map_width - 1 ? 0 : x);
+    const wrappedY = y < 0 ? map_height - 1 : (y > map_height - 1 ? 0: y);
+    return [wrappedX, wrappedY]
+  }
+
+  // TODO: do it according to LibMap.isObstruction()
   const isObstructed = (x: number, y: number) => {
     return false;
   };
@@ -47,7 +53,7 @@ export function createSystemCalls(
     });
 
     try {
-      const tx = await worldSend("netherscape_CrawlSystem_crawl", [x, y]);
+      const tx = await worldSend("netherscape_CrawlSystem_crawl", [wrappedX, wrappedY]);
       await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
     } finally {
       PlayerPosition.removeOverride(positionId);
@@ -89,6 +95,7 @@ export function createSystemCalls(
 
   return {
     spawn,
-    crawlBy
+    crawlBy,
+    wrapParcel2Map
   };
 }
