@@ -4,9 +4,11 @@ export default mudConfig({
   namespace: "netherscape",
   enums: {
     ParcelType: ["CUSTOMIZED", "NONE", "LEFT", "UP", "RIGHT", "DOWN", "LEFTUP", "RIGHTUP", "RIGHTDOWN", "LEFTDOWN"],
-    TerrainType: ["NONE", "TREE", "GRASS", "FLOWER", "CONSOLE"]
+    TerrainType: ["NONE", "TREE", "GRASS", "FLOWER", "CONSOLE"],
+    AttackType: ["NORMAL", "PARALYSIS"],
   },
   tables: {
+    // ----- player position, map, parcel
     MapConfig: {
       // primaryKeys: {y: "uint16"},
       schema: {
@@ -22,7 +24,40 @@ export default mudConfig({
         x: "uint16",
         y: "uint16"
       }
-    }
+    },
+    // ----- PC, attacks, and command
+    PCClass: {
+      schema: {
+        maxHP: "uint16",
+        atk: "uint16",
+        spd: "uint16",
+        maxPP: "uint16",
+        attackIDs: "bytes32[2]",
+        className: "string",
+      }
+    },
+    PCInstance: {
+      schema: {
+        pcClassID: "bytes32",
+        maxHP: "uint16",
+        atk: "uint16",
+        spd: "uint16",
+        maxPP: "uint16",
+        currentHP: "uint16",
+        blockStarts: "uint256",
+        attackIDs: "bytes32[]"
+      }
+    },
+    AttackClass: {
+      schema: {
+        power: "uint16",
+        pp: "uint16",
+        crit: "uint16",
+        attackType: "AttackType",
+        className: "string",
+      }
+    },
+    CommandedBy: "bytes32",
   },
   modules: [
     {

@@ -22,3 +22,8 @@ enum TerrainType {
   FLOWER,
   CONSOLE
 }
+
+enum AttackType {
+  NORMAL,
+  PARALYSIS
+}
