@@ -1,4 +1,6 @@
 import ReactDOM from "react-dom/client";
+import "tailwindcss/tailwind.css";
+// import "react-toastify/dist/ReactToastify.css";
 import { mount as mountDevTools } from "@latticexyz/dev-tools";
 import { App } from "./App";
 import { setup } from "./mud/setup";
