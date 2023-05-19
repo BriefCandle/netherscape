@@ -3,13 +3,13 @@ import { Has, HasValue, runQuery } from "@latticexyz/recs";
 import { uuid, awaitStreamValue, hexToArray } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
-import { max_width, max_height, map_height, map_width, parcel_width, parcel_height } from "../constant";
+import { max_width, max_height, map_height, map_width, parcel_width, parcel_height, TerrainType } from "../constant";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { singletonEntity, playerEntity, worldSend, txReduced$ }: SetupNetworkResult,
-  { PlayerPosition, Player, MapConfig, ParcelTerrain, Obstruction }: ClientComponents
+  { PlayerPosition, Player, MapConfig, ParcelTerrain }: ClientComponents
 ) {
 
   // comply with LibMap.distance
@@ -28,7 +28,6 @@ export function createSystemCalls(
   // TODO: do it according to LibMap.isObstruction()
   const isObstructed = (x: number, y: number) => {
 
-    const parcelTypes = MapConfig.values.parcelTypes.values();
     const map_matrix = [...MapConfig.values.parcelTypes.entries()].map(v=>v[1]);
 
     const parcel2map_x = Math.floor(x / parcel_width);
@@ -50,7 +49,7 @@ export function createSystemCalls(
     // const obKey = bytes32Value;
     // const ob = getComponentValue(Obstruction, obKey as Entity)?.value
     
-    return terrainValues[parcel_y][parcel_x] == 1;
+    return terrainValues[parcel_y][parcel_x] as TerrainType == TerrainType.TREE;
   };
 
   const crawlTo = async (x: number, y: number) => {
