@@ -15,9 +15,9 @@ contract ParcelTemplateDown is ParcelTemplate {
 
     map = [
       [G, G, G, G, G],
-      [G, F, T, T, G],
-      [G, F, T, T, T],
-      [G, F, G, F, G],
+      [G, F, F, F, G],
+      [G, F, F, F, F],
+      [G, F, F, F, F],
       [T, T, T, T, T]
     ];
 

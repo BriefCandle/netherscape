@@ -26,8 +26,8 @@ library LibMap {
   // }
 
   // mainly to lodge obstruction
-  function hashCoord(bytes32 parcelID, uint16 terrain_x, uint16 terrain_y) internal pure returns (bytes32 hashValue) {
-    bytes memory data = abi.encode(parcelID, terrain_x, terrain_y);
+  function hashCoord(bytes32 parcelID, uint16 parcel_x, uint16 parcel_y) internal pure returns (bytes32 hashValue) {
+    bytes memory data = abi.encode(parcelID, parcel_x, parcel_y);
     hashValue = keccak256(data);
   }
 
@@ -79,9 +79,9 @@ library LibMap {
     uint16 map_x, uint16 map_y
   ) pure internal returns (uint16 parcel_x, uint16 parcel_y, uint16 parcel2map_x, uint16 parcel2map_y) {
     parcel2map_x = map_x / parcel_width;
-    parcel_x = map_x % parcel_width;
+    parcel_x = (map_x + parcel_width) % parcel_width;
     parcel2map_y = map_y / parcel_height;
-    parcel_y = map_y & parcel_height;
+    parcel_y = (map_y + parcel_height) % parcel_height;
   }
 
   function isObstruction(uint16 map_x, uint16 map_y) internal view returns (bool) {
