@@ -187,5 +187,38 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    OfferEnabled: (() => {
+      const tableId = new TableId("netherscape", "OfferEnabled");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    PCLoan: (() => {
+      const tableId = new TableId("netherscape", "PCLoan");
+      return defineComponent(
+        world,
+        {
+          debtorID: RecsType.String,
+          duration: RecsType.BigInt,
+          collateral: RecsType.BigInt,
+          interestRate: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

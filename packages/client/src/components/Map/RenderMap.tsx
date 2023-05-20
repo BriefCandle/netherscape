@@ -88,18 +88,14 @@ export const RenderMap = () => {
   console.log("map_screen_terrainMaps", map_screen_terrainMaps)
 
   return (
-    <>
       <MapProvider>
         
-        <div>
+        <div className="w-full relative flex flex-col">
           {map_screen_terrainMaps.map((row, rowIndex) => (
-            <div key={rowIndex}>
+            <div key={rowIndex} className="relative flex flex-row">
               {row.map((terrainInfo, columnIndex) => (
-                <div key={columnIndex} style={{
-                  position: 'relative',
-                  left: columnIndex * parcel_width * terrain_width,
-                  top: rowIndex * parcel_height * terrain_height
-                }}>
+                <div key={columnIndex} 
+                className="relative flex flex-row">
                   {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
                     <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} />
                     : null}
@@ -111,16 +107,5 @@ export const RenderMap = () => {
           ))}
         </div>
       </MapProvider>
-
-  <style>
-  {`
-  .parcel {
-    position: 'relative', 
-    left: columnIndex * parcel_width* terrain_width, 
-    top: rowIndex * parcel_height * terrain_height
-  }
-  `}
-  </style>
-    </>
   )
 }

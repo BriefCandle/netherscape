@@ -77,15 +77,13 @@ export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPos
 
   return (
   <>
-    {activeComponent == ActiveComponent.mapMenu ? <MapMenu /> : null}
-    <div style={{
-      zIndex: 1, position: 'absolute',
-      left: terrain_width * parcel_x,
-      top: terrain_height * parcel_y,
-      width: terrain_width, height: terrain_height,
-      display: 'flex', flexDirection: 'row', flexWrap: 'wrap',
-      alignItems: 'center', justifyContent: 'center'  
-  }}>
+    <div 
+      className="flex flex-row flex-wrap justify-center items-center z-10 absolute"
+      style={{
+        left: terrain_width * parcel_x,
+        top: terrain_height * parcel_y,
+        width: terrain_width, height: terrain_height,
+    }}>
       <img style={{width: '45px', height: "35px"}} src={ethan_down} alt="" />
     </div> 
   </>
