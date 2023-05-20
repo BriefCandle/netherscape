@@ -125,8 +125,46 @@ export function createSystemCalls(
   
   }
 
+  const respawn = async() => {
+    if (!playerEntity) {
+      throw new Error("no player");
+    }
+
+    const canReSpawn = getComponentValue(Player, playerEntity)?.value == true;
+    if (!canReSpawn) {
+      throw new Error("not yet spawned");
+    }
+
+    try {
+      const tx = await worldSend("netherscape_CrawlSystem_respawn", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("respawn succesffully")
+    }
+  }
+
+  const logout = async() => {
+    if (!playerEntity) {
+      throw new Error("no player");
+    }
+
+    const canLogout = getComponentValue(Player, playerEntity)?.value == true;
+    if (!canLogout) {
+      throw new Error("not yet spawned");
+    }
+
+    try {
+      const tx = await worldSend("netherscape_CrawlSystem_logout", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("logout succesffully")
+    }
+  }
+
   return {
     spawn,
+    respawn,
+    logout,
     crawlBy,
     wrapParcel2Map
   };

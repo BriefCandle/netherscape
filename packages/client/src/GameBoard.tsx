@@ -7,7 +7,7 @@ export const GameBoard = () => {
   const {
     components: { PlayerPosition, Player },
     network: { playerEntity },
-    systemCalls: { spawn },
+    systemCalls: { spawn, respawn, logout },
   } = useMUD();
 
   const canSpawn = useComponentValue(Player, playerEntity)?.value !== true;
@@ -29,8 +29,7 @@ export const GameBoard = () => {
           <RenderBattle /> 
         </BattleProvider>: null} */}
       
-      { canSpawn ? <button onClick={spawn}>Spawn</button> : null}
-
+      { canSpawn ? <button onClick={spawn} className="text-lg w-full" >Spawn</button> : null}
       
       <RenderMap/>
     </div>
