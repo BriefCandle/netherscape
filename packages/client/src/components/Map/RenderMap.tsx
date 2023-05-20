@@ -43,7 +43,7 @@ export const RenderMap = () => {
   }
 
   const map_matrix = convertMapIteratorToArray(parcelTypes);
-  console.log(map_matrix)
+  console.log("map_matrix", map_matrix)
 
   // --------- get a smaller map based on player's parcel coord ---------
   const loopMap = (parcel2map_coord: Coord) => {
@@ -61,7 +61,7 @@ export const RenderMap = () => {
       map_screen[j][i] = loopMap({x: parcel2map_x - Math.floor(screen_width/2) + i, y: parcel2map_y - Math.floor(screen_height/2) + j})
     }
   }
-  console.log(map_screen)
+  console.log("map_screen", map_screen)
 
   // --------- get terrainMap for map_screen ---------
   const getParcelID = (parcel2map_x: number, parcel2map_y: number, parcelType: number) => {
@@ -81,7 +81,7 @@ export const RenderMap = () => {
     const parcelType = map_matrix[wrappedY][wrappedX];
     const parcelID = getParcelID(wrappedX, wrappedY, parcelType);
     const terrainMap = getComponentValue(ParcelTerrain, parcelID as Entity)?.value
-    return terrainMap
+    return {terrainMap: terrainMap, coord: {x: wrappedX, y: wrappedY}}
   }))
 
   console.log("map_screen_terrainMaps", map_screen_terrainMaps)
@@ -93,7 +93,7 @@ export const RenderMap = () => {
       <div>
         {map_screen_terrainMaps.map((row, rowIndex) => (
           <div key={rowIndex}>
-            {row.map((terrainMap, columnIndex) => (
+            {row.map((terrainInfo, columnIndex) => (
               <div key={columnIndex} style={{
                 position: 'relative', 
                 left: columnIndex * parcel_width* terrain_width, 
@@ -105,7 +105,7 @@ export const RenderMap = () => {
                 </MapProvider>
                  : null}
 
-                <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainMap={terrainMap}/>
+                <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainInfo={terrainInfo}/>
               </div>
             ))}
           </div>

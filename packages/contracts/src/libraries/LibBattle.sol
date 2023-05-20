@@ -6,12 +6,10 @@ import { ParcelType, TerrainType } from "../codegen/Types.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { parcel_width, parcel_height, Coord, map_width, map_height, max_width, max_height } from "../systems/MapSystem.sol";
 
-import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
-
 import { LibUtils } from "./LibUtils.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 
-
+// BattleWith Table: attacker -> defender
 library LibBattle { 
   
   function isPlayerInBattle(bytes32 player) internal view returns (bool) {
@@ -19,12 +17,12 @@ library LibBattle {
   }
 
   function isPlayerDefender(bytes32 player) internal view returns (bool) {
-    bytes32 attacker = getAttackerFromDefender(player);
-    return attacker != LibUtils.numberToEntityKey(0);
+    bytes32[] memory attackers = getAttackersFromDefender(player);
+    return attackers.length != 0;
   }
 
-  function getAttackerFromDefender(bytes32 defender) internal view returns (bytes32) {
-    return getKeysWithValue(BattleWithTableId, BattleWith.encode(defender))[0];
+  function getAttackersFromDefender(bytes32 defender) internal view returns (bytes32[] memory) {
+    return getKeysWithValue(BattleWithTableId, BattleWith.encode(defender));
   }
 
   function isPlayerAttacker(bytes32 player) internal view returns (bool) {
@@ -32,7 +30,7 @@ library LibBattle {
     return defender != LibUtils.numberToEntityKey(0);
   }
 
-  // defender is the value in BattleWith
+  
   function getDefenderFromAttacker(bytes32 attacker) internal view returns (bytes32) {
     return BattleWith.get(attacker);
   }

@@ -79,6 +79,11 @@ export default mudConfig({
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("PlayerPosition"), resolveTableId("SiegedBy"), resolveTableId("BattleWith"), resolveTableId("CommandedBy")]
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("BattleWith")]
     }
   ]
 });

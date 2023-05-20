@@ -2,8 +2,12 @@ import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_wid
 import { hexToArray } from "@latticexyz/utils";
 import { RenderTerrain } from "./RenderTerrain";
 
-export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terrainMap: string | undefined}) => {
-  const { terrainMap } = props; 
+export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terrainInfo: any}) => {
+  const { terrainInfo } = props; 
+
+  const { terrainMap, parcel2map_coord } = terrainInfo;
+
+  
 
   // const terrainValues = Array.from(hexToArray(terrainMap as string)).map((value, index) => ({
   //   x: index % parcel_width,

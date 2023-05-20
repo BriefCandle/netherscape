@@ -125,9 +125,30 @@ export function createSystemCalls(
   
   }
 
+  const siege = async() => {
+    try {
+      const tx = await worldSend("netherscape_SiegeSystem_siege", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("siege successfully");
+    }
+  }
+
+  const logout = async() => {
+    try {
+      const tx = await worldSend("netherscape_CrawlSystem_logout", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("logout successfully");
+    }
+  }
+
+
   return {
     spawn,
     crawlBy,
-    wrapParcel2Map
+    wrapParcel2Map,
+    siege,
+    logout
   };
 }

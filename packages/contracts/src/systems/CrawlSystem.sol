@@ -17,7 +17,7 @@ contract CrawlSystem is System {
   function crawl(uint16 x, uint16 y) public {
     bytes32 player = LibUtils.addressToEntityKey(address(_msgSender()));
 
-    require(LibBattle.isPlayerInBattle(player), "Crawl: player in battle");
+    require(!LibBattle.isPlayerInBattle(player), "Crawl: player in battle");
 
     require(LibMap.hasPlayerPosition(player), "Crawl: player has no position");
 
