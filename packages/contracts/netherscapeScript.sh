@@ -33,3 +33,5 @@ forge script --rpc-url http://localhost:8545 --broadcast script/pc/CreateNewAtta
 echo "create CreateNewPCClass"
 forge script --rpc-url http://localhost:8545 --broadcast script/pc/CreateNewPCClass.s.sol:CreateNewPCClass 
 
+echo "redeploy PostDeploy"
+forge script --rpc-url http://localhost:8545 --broadcast script/test/PostReDeploy.s.sol:PostReDeploy
