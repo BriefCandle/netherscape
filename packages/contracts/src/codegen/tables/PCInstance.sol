@@ -28,7 +28,7 @@ struct PCInstanceData {
   uint16 maxPP;
   uint16 currentHP;
   uint256 blockStarts;
-  bytes32[] attackIDs;
+  bytes32[2] attackIDs;
 }
 
 library PCInstance {
@@ -329,37 +329,37 @@ library PCInstance {
   }
 
   /** Get attackIDs */
-  function getAttackIDs(bytes32 key) internal view returns (bytes32[] memory attackIDs) {
+  function getAttackIDs(bytes32 key) internal view returns (bytes32[2] memory attackIDs) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 7);
-    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_bytes32());
+    return toStaticArray_bytes32_2(SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_bytes32());
   }
 
   /** Get attackIDs (using the specified store) */
-  function getAttackIDs(IStore _store, bytes32 key) internal view returns (bytes32[] memory attackIDs) {
+  function getAttackIDs(IStore _store, bytes32 key) internal view returns (bytes32[2] memory attackIDs) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 7);
-    return (SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_bytes32());
+    return toStaticArray_bytes32_2(SliceLib.getSubslice(_blob, 0, _blob.length).decodeArray_bytes32());
   }
 
   /** Set attackIDs */
-  function setAttackIDs(bytes32 key, bytes32[] memory attackIDs) internal {
+  function setAttackIDs(bytes32 key, bytes32[2] memory attackIDs) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 7, EncodeArray.encode((attackIDs)));
+    StoreSwitch.setField(_tableId, _keyTuple, 7, EncodeArray.encode(fromStaticArray_bytes32_2(attackIDs)));
   }
 
   /** Set attackIDs (using the specified store) */
-  function setAttackIDs(IStore _store, bytes32 key, bytes32[] memory attackIDs) internal {
+  function setAttackIDs(IStore _store, bytes32 key, bytes32[2] memory attackIDs) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 7, EncodeArray.encode((attackIDs)));
+    _store.setField(_tableId, _keyTuple, 7, EncodeArray.encode(fromStaticArray_bytes32_2(attackIDs)));
   }
 
   /** Get the length of attackIDs */
@@ -474,7 +474,7 @@ library PCInstance {
     uint16 maxPP,
     uint16 currentHP,
     uint256 blockStarts,
-    bytes32[] memory attackIDs
+    bytes32[2] memory attackIDs
   ) internal {
     bytes memory _data = encode(pcClassID, maxHP, atk, spd, maxPP, currentHP, blockStarts, attackIDs);
 
@@ -495,7 +495,7 @@ library PCInstance {
     uint16 maxPP,
     uint16 currentHP,
     uint256 blockStarts,
-    bytes32[] memory attackIDs
+    bytes32[2] memory attackIDs
   ) internal {
     bytes memory _data = encode(pcClassID, maxHP, atk, spd, maxPP, currentHP, blockStarts, attackIDs);
 
@@ -563,7 +563,7 @@ library PCInstance {
 
       _start = _end;
       _end += _encodedLengths.atIndex(0);
-      _table.attackIDs = (SliceLib.getSubslice(_blob, _start, _end).decodeArray_bytes32());
+      _table.attackIDs = toStaticArray_bytes32_2(SliceLib.getSubslice(_blob, _start, _end).decodeArray_bytes32());
     }
   }
 
@@ -576,7 +576,7 @@ library PCInstance {
     uint16 maxPP,
     uint16 currentHP,
     uint256 blockStarts,
-    bytes32[] memory attackIDs
+    bytes32[2] memory attackIDs
   ) internal view returns (bytes memory) {
     uint40[] memory _counters = new uint40[](1);
     _counters[0] = uint40(attackIDs.length * 32);
@@ -592,7 +592,7 @@ library PCInstance {
         currentHP,
         blockStarts,
         _encodedLengths.unwrap(),
-        EncodeArray.encode((attackIDs))
+        EncodeArray.encode(fromStaticArray_bytes32_2(attackIDs))
       );
   }
 
@@ -617,4 +617,22 @@ library PCInstance {
 
     _store.deleteRecord(_tableId, _keyTuple);
   }
+}
+
+function toStaticArray_bytes32_2(bytes32[] memory _value) pure returns (bytes32[2] memory _result) {
+  // in memory static arrays are just dynamic arrays without the length byte
+  assembly {
+    _result := add(_value, 0x20)
+  }
+}
+
+function fromStaticArray_bytes32_2(bytes32[2] memory _value) view returns (bytes32[] memory _result) {
+  _result = new bytes32[](2);
+  uint256 fromPointer;
+  uint256 toPointer;
+  assembly {
+    fromPointer := _value
+    toPointer := add(_result, 0x20)
+  }
+  Memory.copy(fromPointer, toPointer, 64);
 }

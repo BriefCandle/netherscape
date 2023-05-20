@@ -157,5 +157,35 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    BattleWith: (() => {
+      const tableId = new TableId("netherscape", "BattleWith");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    SiegedBy: (() => {
+      const tableId = new TableId("netherscape", "SiegedBy");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

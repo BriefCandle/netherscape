@@ -7,8 +7,15 @@ export default mudConfig({
     TerrainType: ["NONE", "TREE", "GRASS", "FLOWER", "CONSOLE"],
     AttackType: ["NORMAL", "PARALYSIS"],
   },
+  systems: {
+    BattleInitSystem: {
+      name: "battleInit",
+      openAccess: false,
+      accessList:["CrawlSystem"]
+    },
+  },
   tables: {
-    // ----- player position, map, parcel
+    // ----- player position, map, parcel -----
     MapConfig: {
       // primaryKeys: {y: "uint16"},
       schema: {
@@ -25,7 +32,7 @@ export default mudConfig({
         y: "uint16"
       }
     },
-    // ----- PC, attacks, and command
+    // ----- PC, attacks, and command -----
     PCClass: {
       schema: {
         maxHP: "uint16",
@@ -45,7 +52,7 @@ export default mudConfig({
         maxPP: "uint16",
         currentHP: "uint16",
         blockStarts: "uint256",
-        attackIDs: "bytes32[]"
+        attackIDs: "bytes32[2]" // TODO: change it to dynamic
       }
     },
     AttackClass: {
@@ -58,17 +65,20 @@ export default mudConfig({
       }
     },
     CommandedBy: "bytes32",
+    // ----- battle related -----
+    BattleWith: "bytes32",
+    SiegedBy: "bytes32"
   },
   modules: [
     {
       name: "KeysInTableModule",
       root: true,
-      args: [resolveTableId("PlayerPosition")],
+      args: [resolveTableId("PlayerPosition"), resolveTableId("SiegedBy")],
     },
     {
       name: "KeysWithValueModule",
       root: true,
-      args: [resolveTableId("PlayerPosition")]
+      args: [resolveTableId("PlayerPosition"), resolveTableId("SiegedBy"), resolveTableId("CommandedBy")]
     }
   ]
 });

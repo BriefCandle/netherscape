@@ -14,7 +14,7 @@ interface IPCSystem {
 
   function netherscape_PCSystem_createNewPCClass(bytes32 pcClassID, PCClassData memory pcClassData) external;
 
-  function netherscape_PCSystem_spawnPC(bytes32 PCClassID, bytes32 player) external;
+  function netherscape_PCSystem_spawnPC(bytes32 pcClassID, bytes32 player) external;
 
   function netherscape_PCSystem_askToJoin() external;
 }
