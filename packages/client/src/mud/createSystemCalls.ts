@@ -134,6 +134,15 @@ export function createSystemCalls(
     }
   }
 
+  const unsiege = async() => {
+    try {
+      const tx = await worldSend("netherscape_SiegeSystem_unsiege", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("unsiege successfully");
+    }
+  }
+
   const logout = async() => {
     try {
       const tx = await worldSend("netherscape_CrawlSystem_logout", []);
@@ -149,6 +158,7 @@ export function createSystemCalls(
     crawlBy,
     wrapParcel2Map,
     siege,
+    unsiege,
     logout
   };
 }

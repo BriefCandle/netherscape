@@ -32,7 +32,7 @@ export default mudConfig({
         y: "uint16"
       }
     },
-    // ----- PC, attacks, and command -----
+    // ----- PC, attacks, class and instance -----
     PCClass: {
       schema: {
         maxHP: "uint16",
@@ -52,7 +52,7 @@ export default mudConfig({
         maxPP: "uint16",
         currentHP: "uint16",
         blockStarts: "uint256",
-        attackIDs: "bytes32[2]" // TODO: change it to dynamic
+        attackIDs: "bytes32[2]" // TODO: change it to dynamic so that new skills can be learned
       }
     },
     AttackClass: {
@@ -64,26 +64,37 @@ export default mudConfig({
         className: "string",
       }
     },
+    // ----- commandedBy -----
     CommandedBy: "bytes32",
     // ----- battle related -----
-    BattleWith: "bytes32",
-    SiegedBy: "bytes32"
+    BattleWith: "bytes32", // attacker -> defender
+    SiegedBy: "bytes32"    // parcelHashID -> player
   },
   modules: [
     {
       name: "KeysInTableModule",
       root: true,
-      args: [resolveTableId("PlayerPosition"), resolveTableId("SiegedBy"), resolveTableId("BattleWith")],
+      args: [resolveTableId("PlayerPosition")],
     },
     {
       name: "KeysWithValueModule",
       root: true,
-      args: [resolveTableId("PlayerPosition"), resolveTableId("SiegedBy"), resolveTableId("BattleWith"), resolveTableId("CommandedBy")]
+      args: [resolveTableId("PlayerPosition")]
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("SiegedBy")]
     },
     {
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("BattleWith")]
-    }
+    },
+    {
+      name: "KeysWithValueModule",
+      root: true,
+      args: [resolveTableId("CommandedBy")]
+    },
   ]
 });

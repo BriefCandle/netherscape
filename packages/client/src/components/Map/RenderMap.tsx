@@ -6,6 +6,7 @@ import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_wid
 
 import { RenderParcel } from "./RenderParcel";
 import { RenderPlayer } from "./RenderPlayer";
+
 import { MapProvider } from "../../utils/MapContext";
 
 export const RenderMap = () => {
@@ -87,32 +88,30 @@ export const RenderMap = () => {
   console.log("map_screen_terrainMaps", map_screen_terrainMaps)
 
   return (
-  <>
-  <div>
-    {
-      <div>
-        {map_screen_terrainMaps.map((row, rowIndex) => (
-          <div key={rowIndex}>
-            {row.map((terrainInfo, columnIndex) => (
-              <div key={columnIndex} style={{
-                position: 'relative', 
-                left: columnIndex * parcel_width* terrain_width, 
-                top: rowIndex * parcel_height * terrain_height
-              }}>
-                { playerPosition && rowIndex === Math.floor(screen_height/2) && columnIndex === Math.floor(screen_width/2) ? 
-                <MapProvider>
-                  <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition}/>
-                </MapProvider>
-                 : null}
+    <>
+      <MapProvider>
+        
+        <div>
+          {map_screen_terrainMaps.map((row, rowIndex) => (
+            <div key={rowIndex}>
+              {row.map((terrainInfo, columnIndex) => (
+                <div key={columnIndex} style={{
+                  position: 'relative',
+                  left: columnIndex * parcel_width * terrain_width,
+                  top: rowIndex * parcel_height * terrain_height
+                }}>
+                  {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
+                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} />
+                    : null}
 
-                <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainInfo={terrainInfo}/>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    }
-  </div>
+                  <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainInfo={terrainInfo} />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </MapProvider>
+
   <style>
   {`
   .parcel {
@@ -122,6 +121,6 @@ export const RenderMap = () => {
   }
   `}
   </style>
-  </>
+    </>
   )
 }

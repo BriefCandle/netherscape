@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useMUD } from "../../MUDContext";
 import { ActiveComponent } from "../../utils/useActiveComponent";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
+import { MapMenu } from "../MapMenu/MapMenu";
 
 export const getInteractCoord = (coord: {x: number, y: number}, direction: PlayerDirection):{x: number, y: number} => {
   switch (direction) {
@@ -68,7 +69,7 @@ export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPos
   
     
     const press_b = () => {return;}
-    const press_start = () => setActive(ActiveComponent.menu);
+    const press_start = () => setActive(ActiveComponent.mapMenu);
   
     useKeyboardMovement(activeComponent == ActiveComponent.map, 
       press_up, press_down, press_left, press_right, press_a, press_b, press_start)
@@ -76,6 +77,7 @@ export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPos
 
   return (
   <>
+    {activeComponent == ActiveComponent.mapMenu ? <MapMenu /> : null}
     <div style={{
       zIndex: 1, position: 'absolute',
       left: terrain_width * parcel_x,

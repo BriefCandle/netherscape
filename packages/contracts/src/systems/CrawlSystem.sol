@@ -31,6 +31,8 @@ contract CrawlSystem is System {
 
     require(LibMap.isWithinBoundary(x, y), "Crawl: out of boundary");
 
+    require(!LibSiege.isPlayerSiege(player), "Crawl, player has sieged");
+
     PlayerPosition.set(player, x, y);
 
     bytes32 siegePlayer = LibSiege.getPlayerFromMapCoord(x, y);

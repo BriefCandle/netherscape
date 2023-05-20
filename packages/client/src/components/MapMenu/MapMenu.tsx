@@ -12,9 +12,9 @@ const menuItems = [
   { name: "Logout", value: "logout"}
 ]
 
-export const RenderMenu = () => {
+export const MapMenu = () => {
 
-  const { systemCalls: {siege, logout}} = useMUD();
+  const { systemCalls: {siege, unsiege, logout}} = useMUD();
 
   const { setActive, activeComponent } = useMapContext()
 
@@ -36,7 +36,11 @@ export const RenderMenu = () => {
       const item = menuItems[selectedItemIndex];
       switch (item.value) {
         case "siege":
+          siege();
           return console.log("siege");
+        case "unsiege":
+          unsiege();
+          return console.log("unsiege");
         case "team":
           // setThatPlayerIndex(playerEntity);
           return setActive(ActiveComponent.team);
@@ -56,7 +60,7 @@ export const RenderMenu = () => {
     const press_right = () => { return; };
     const press_start = () => { setActive(ActiveComponent.map);};
 
-  useKeyboardMovement(activeComponent == ActiveComponent.menu, 
+  useKeyboardMovement(activeComponent == ActiveComponent.mapMenu, 
     press_up, press_down, press_left, press_right, press_a, press_b, press_start)
 
   

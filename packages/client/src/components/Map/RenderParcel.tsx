@@ -1,13 +1,24 @@
 import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_width, map_height, max_width, max_height, Coord, terrain_width, terrain_height } from "../../constant";
 import { hexToArray } from "@latticexyz/utils";
 import { RenderTerrain } from "./RenderTerrain";
+import { useMUD } from "../../MUDContext";
+import { useComponentValue } from "@latticexyz/react";
+import { ethers } from 'ethers';
+import { Entity, getComponentValue } from "@latticexyz/recs";
+
 
 export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terrainInfo: any}) => {
   const { terrainInfo } = props; 
 
-  const { terrainMap, parcel2map_coord } = terrainInfo;
-
+  const {
+    components: { SiegedBy },
+  } = useMUD();
   
+  const { terrainMap, coord } = terrainInfo;
+
+  const encodedData = ethers.utils.defaultAbiCoder.encode(['uint16', 'uint16'], [coord.x, coord.y]);
+  const hash = ethers.utils.keccak256(encodedData);
+  const isSieged = useComponentValue(SiegedBy, hash as Entity)?.value
 
   // const terrainValues = Array.from(hexToArray(terrainMap as string)).map((value, index) => ({
   //   x: index % parcel_width,
@@ -28,6 +39,15 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
   return (
   <>
   <div>
+    { isSieged ?     
+      <div style={{
+        backgroundColor: 'rgba(255, 0, 0, 0.5)',
+        width: terrain_width * parcel_width,
+        height: terrain_height * parcel_height,
+        position: "absolute",
+        zIndex: 9999
+      }}></div> : null}
+      
     {terrainValues.map((row, rowIndex) => (
       <div key={rowIndex}>
         {row.map((terrainValue, columnIndex) => (
@@ -45,18 +65,6 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
       </div>
     ))}
   </div>
-  <style>
-  {`
-    .terrain {
-      position: 'absolute';
-      left: terrain_width * rowIndex;
-      top: terrain_height * columnIndex;
-      width: terrain_width, height: terrain_height;
-      display: 'flex', flexDirection: 'row', flexWrap: 'wrap';
-      alignItems: 'center', justifyContent: 'center'   
-    }       
-  `}
-  </style>
   </>
   )
 }
