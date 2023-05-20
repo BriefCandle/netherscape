@@ -1,17 +1,20 @@
-import { Entity, getComponentValue } from "@latticexyz/recs";
-import { Has, HasValue, runQuery } from "@latticexyz/recs";
+import { Has, HasValue, Entity, getComponentValue, runQuery } from "@latticexyz/recs";
 import { uuid, awaitStreamValue, hexToArray } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 import { max_width, max_height, map_height, map_width, parcel_width, parcel_height, TerrainType } from "../constant";
+import { ethers, utils } from 'ethers';
 
-import { utils } from "ethers";
+import { useComponentValue } from "@latticexyz/react";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { singletonEntity, playerEntity, worldSend, txReduced$ }: SetupNetworkResult,
-  { PlayerPosition, Player, MapConfig, ParcelTerrain, Obstruction }: ClientComponents
+  { 
+    PlayerPosition, Player, MapConfig, ParcelTerrain, Obstruction, SiegedBy,
+    BattleWith 
+  }: ClientComponents
 ) {
 
   // comply with LibMap.distance
@@ -25,6 +28,27 @@ export function createSystemCalls(
     const wrappedX = x < 0 ? map_width - 1: (x > map_width - 1 ? 0 : x);
     const wrappedY = y < 0 ? map_height - 1 : (y > map_height - 1 ? 0: y);
     return [wrappedX, wrappedY]
+  }
+
+  const isAttacker = () => {
+    if (!playerEntity) {
+      return false;
+    }
+    return getComponentValue(BattleWith, playerEntity)?.value !== undefined
+  }
+
+  const isDefender = () => {
+    if (!playerEntity) {
+      return false;
+    }
+    return runQuery([HasValue(BattleWith, {value: playerEntity})]).size > 0;
+  }
+
+  // TODO: fix, not reactive when unsieged; useComponentValue instead
+  const isSieged = (x: number, y: number) => {
+    const encodedData = ethers.utils.defaultAbiCoder.encode(['uint16', 'uint16'], [x, y]);
+    const hash = ethers.utils.keccak256(encodedData);
+    return getComponentValue(SiegedBy, hash as Entity)?.value !== undefined;
   }
 
   // TODO: do it according to LibMap.isObstruction()
@@ -159,6 +183,7 @@ export function createSystemCalls(
     wrapParcel2Map,
     siege,
     unsiege,
+    isSieged,
     logout
   };
 }

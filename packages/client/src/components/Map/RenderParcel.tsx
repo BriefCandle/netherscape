@@ -11,15 +11,14 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
   const { terrainInfo } = props; 
 
   const {
-    components: { SiegedBy },
+    components: { SiegedBy }
   } = useMUD();
   
   const { terrainMap, coord } = terrainInfo;
 
   const encodedData = ethers.utils.defaultAbiCoder.encode(['uint16', 'uint16'], [coord.x, coord.y]);
   const hash = ethers.utils.keccak256(encodedData);
-  // TODO: fix, not reactive when unsieged
-  const isSieged = useComponentValue(SiegedBy, hash as Entity)?.value
+  const isSieged = useComponentValue(SiegedBy, hash as Entity)?.value !== undefined;
 
   // const terrainValues = Array.from(hexToArray(terrainMap as string)).map((value, index) => ({
   //   x: index % parcel_width,

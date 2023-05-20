@@ -37,13 +37,14 @@ export const MapMenu = () => {
       switch (item.value) {
         case "siege":
           siege();
-          return console.log("siege");
+          return setActive(ActiveComponent.map);
         case "unsiege":
           unsiege();
-          return console.log("unsiege");
+          return setActive(ActiveComponent.map);        
         case "team":
           // setThatPlayerIndex(playerEntity);
-          return setActive(ActiveComponent.team);
+          //  setActive(ActiveComponent.team);
+          return console.log("team")
         case "item":
           return console.log("Item");
         case "logout":
