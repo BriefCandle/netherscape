@@ -41,25 +41,19 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
   <>
   <div>
     { isSieged ?     
-      <div style={{
-        backgroundColor: 'rgba(255, 0, 0, 0.5)',
+      <div className="absolute z-30 bg-red-600 opacity-50" style={{
         width: terrain_width * parcel_width,
         height: terrain_height * parcel_height,
-        position: "absolute",
-        zIndex: 9999
       }}></div> : null}
 
     {terrainValues.map((row, rowIndex) => (
-      <div key={rowIndex}>
+      <div key={rowIndex} className="w-auto h-auto flex flex-row">
         {row.map((terrainValue, columnIndex) => (
-          <div key={columnIndex} style={{
-            position: 'absolute',
-            left: terrain_width * columnIndex,
-            top: terrain_height * rowIndex,
-            width: terrain_width, height: terrain_height,
-            display: 'flex', flexDirection: 'row', flexWrap: 'wrap',
-            alignItems: 'center', justifyContent: 'center'  
-          }}>
+          <div key={columnIndex} 
+            className="relative flex flew-col"
+            style={{
+              width: terrain_width, height: terrain_height,}}
+            >
             <RenderTerrain rowIndex={rowIndex} columnIndex={columnIndex} terrainValue={terrainValue}/>
           </div>
         ))}

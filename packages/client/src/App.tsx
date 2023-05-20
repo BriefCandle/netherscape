@@ -2,6 +2,7 @@ import { useComponentValue } from "@latticexyz/react";
 import { SyncState } from "@latticexyz/network";
 import { useMUD } from "./MUDContext";
 import { GameBoard } from "./GameBoard";
+import "./theme/tailwind.css";
 
 export const App = () => {
   const {
