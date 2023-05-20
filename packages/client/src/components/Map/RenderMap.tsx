@@ -12,7 +12,7 @@ import { MapProvider } from "../../utils/MapContext";
 export const RenderMap = () => {
 
   const {
-    components: { MapConfig, ParcelTerrain, PlayerPosition},
+    components: { MapConfig, ParcelTerrain, Player, PlayerPosition},
     network: { playerEntity },
     systemCalls: { wrapParcel2Map },
   } = useMUD();
@@ -20,6 +20,20 @@ export const RenderMap = () => {
   const hasPlayer = playerEntity !== undefined;
   const hasPlayerPosition = hasPlayer ? getComponentValue(PlayerPosition, playerEntity) !== undefined : false
   const playerPosition = useComponentValue(PlayerPosition, playerEntity) // : {x:0, y:0};
+
+  const otherPlayers = useEntityQuery([Has(Player), Has(PlayerPosition)])
+    .filter((entity) => entity !== playerEntity)
+    .map((entity) => {
+      const position = getComponentValueStrict(PlayerPosition, entity);
+      return {
+        entity,
+        position,
+      };
+  });
+
+  console.log(otherPlayers)
+
+  
 
   // --------- get player's coord on map: 1 absolute coord -> 2 x relative ---------
   const coordMapToParcel = (map_x: number, map_y: number) => {
@@ -99,6 +113,15 @@ export const RenderMap = () => {
                   {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
                     <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} />
                     : null}
+
+                  {
+                    otherPlayers.map((otherPlayer) => {
+                      const {parcel_x, parcel_y, parcel2map_x, parcel2map_y} = coordMapToParcel(otherPlayer.position.x, otherPlayer.position.y);
+                      if(parcel2map_x == terrainInfo.coord.x && parcel2map_y == terrainInfo.coord.y)
+                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} />)
+                      return null;
+                    })
+                  }
 
                   <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainInfo={terrainInfo} />
                 </div>
