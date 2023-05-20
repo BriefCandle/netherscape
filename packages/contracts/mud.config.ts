@@ -17,7 +17,7 @@ export default mudConfig({
   tables: {
     // ----- player position, map, parcel -----
     MapConfig: {
-      // primaryKeys: {y: "uint16"},
+      // primaryKeys: {y: "uint16"},    use singleton?
       schema: {
         parcelTypes: "uint8[32]"
       },
@@ -67,7 +67,18 @@ export default mudConfig({
     CommandedBy: "bytes32",
     // ----- battle related -----
     BattleWith: "bytes32",
-    SiegedBy: "bytes32"
+    SiegedBy: "bytes32",
+    
+    // ----- reinforcement  -----
+    OfferEnabled: "bool",
+    PCLoan: {
+      schema: {
+        debtorID: "bytes32",       // player ID
+        duration: "uint256",      //block number
+        collateral: "uint256",    // token amount
+        interestRate: "int32",
+      }
+    }
   },
   modules: [
     {

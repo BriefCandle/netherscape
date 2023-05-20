@@ -14,10 +14,10 @@ export const GameBoard = () => {
   const canSpawn = useComponentValue(Player, playerEntity)?.value !== true;
 
   return (
-    <div className="flex flex-row  border-2 border-white rounded-lg">
+    <div className="flex flex-row ">
       {/* overflow: "hidden", */}
-      {/* <OfferList /> */}
-      <div className="flex flex-col relative h-full w-full" >
+      
+      <div className="flex flex-col relative h-full w-full border-2 border-white rounded-lg" >
         {/* {canSpawn ? <SpawnPlayer /> : null}
         {!canSpawn && canRespawn? <RespawnPlayer /> : null}
         
@@ -25,7 +25,7 @@ export const GameBoard = () => {
           <MapProvider>
             <RenderMap/>
           </MapProvider> : null}
-        
+        aa
         { battleID ?
           <BattleProvider battleID={battleID} playerEntityId={playerEntityId}>
             <RenderBattle /> 
@@ -36,6 +36,7 @@ export const GameBoard = () => {
         <div className="game h-full w-full"> <RenderMap /></div>
         
       </div>
+      <OfferList />
     </div>
 
   )
