@@ -6,7 +6,7 @@ import { useMUD } from "../../MUDContext";
 
 const menuItems = [
   { name: "$Siege", value: "siege"},
-  { name: "$Unsiege", value: "unsiege"},
+  { name: "$Unsiege", value: "unsiege"}, // TODO: fix, check for siege condition and grey out
   { name: "Team", value: "team"},
   { name: "Item", value: "item"},
   { name: "Logout", value: "logout"}

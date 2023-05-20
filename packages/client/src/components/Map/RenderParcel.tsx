@@ -18,6 +18,7 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
 
   const encodedData = ethers.utils.defaultAbiCoder.encode(['uint16', 'uint16'], [coord.x, coord.y]);
   const hash = ethers.utils.keccak256(encodedData);
+  // TODO: fix, not reactive when unsieged
   const isSieged = useComponentValue(SiegedBy, hash as Entity)?.value
 
   // const terrainValues = Array.from(hexToArray(terrainMap as string)).map((value, index) => ({
@@ -47,7 +48,7 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
         position: "absolute",
         zIndex: 9999
       }}></div> : null}
-      
+
     {terrainValues.map((row, rowIndex) => (
       <div key={rowIndex}>
         {row.map((terrainValue, columnIndex) => (
