@@ -22,18 +22,15 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
   });
 
   return (
-  <>
-  <div>
+  <div >
     {terrainValues.map((row, rowIndex) => (
-      <div key={rowIndex}>
+      <div key={rowIndex} className="w-auto h-auto flex flex-row">
         {row.map((terrainValue, columnIndex) => (
-          <div key={columnIndex} style={{
-            position: 'absolute',
-            left: terrain_width * columnIndex,
-            top: terrain_height * rowIndex,
-            width: terrain_width, height: terrain_height,
-            display: 'flex', flexDirection: 'row', flexWrap: 'wrap',
-            alignItems: 'center', justifyContent: 'center'  
+          <div key={columnIndex} 
+            className="relative flex flew-col"
+            style={{
+
+              width: terrain_width, height: terrain_height,
           }}>
             <RenderTerrain rowIndex={rowIndex} columnIndex={columnIndex} terrainValue={terrainValue}/>
           </div>
@@ -41,18 +38,5 @@ export const RenderParcel = (props: {rowIndex: number, columnIndex: number, terr
       </div>
     ))}
   </div>
-  <style>
-  {`
-    .terrain {
-      position: 'absolute';
-      left: terrain_width * rowIndex;
-      top: terrain_height * columnIndex;
-      width: terrain_width, height: terrain_height;
-      display: 'flex', flexDirection: 'row', flexWrap: 'wrap';
-      alignItems: 'center', justifyContent: 'center'   
-    }       
-  `}
-  </style>
-  </>
   )
 }

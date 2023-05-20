@@ -10,12 +10,22 @@ import { IBattleSystem } from "./IBattleSystem.sol";
 import { ICrawlSystem } from "./ICrawlSystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
 import { IPCSystem } from "./IPCSystem.sol";
+import { IReinforceSystem } from "./IReinforceSystem.sol";
 import { ISiegeSystem } from "./ISiegeSystem.sol";
 
 /**
  * The IWorld interface includes all systems dynamically added to the World
  * during the deploy process.
  */
-interface IWorld is IBaseWorld, IBattleInitSystem, IBattleSystem, ICrawlSystem, IMapSystem, IPCSystem, ISiegeSystem {
+interface IWorld is
+  IBaseWorld,
+  IBattleInitSystem,
+  IBattleSystem,
+  ICrawlSystem,
+  IMapSystem,
+  IPCSystem,
+  IReinforceSystem,
+  ISiegeSystem
+{
 
 }
