@@ -96,7 +96,6 @@ export const RenderMap = () => {
 
   const map_screen_terrainMaps = map_screen.map(row => row.map((coord)=>{
     const [wrappedX, wrappedY] = wrapParcel2Map(coord.x, coord.y);
-    console.log(wrappedX, wrappedY)
     const parcelType = map_matrix[wrappedY][wrappedX];
     const parcelID = getParcelID(wrappedX, wrappedY, parcelType);
     const terrainMap = getComponentValue(ParcelTerrain, parcelID as Entity)?.value
@@ -130,12 +129,12 @@ export const RenderMap = () => {
       crawlBy(1, 0);}
     
     const press_a = useCallback(() => {
-      if (playerPosition !== undefined && playerDirection !== undefined) {
-        const coord = getInteractCoord(playerPosition, playerDirection)
-        console.log("coord", coord)
-        setInteractCoord(coord)
-        setActive(ActiveComponent.terrainConsole)
-      }
+      // if (playerPosition !== undefined && playerDirection !== undefined) {
+      //   const coord = getInteractCoord(playerPosition, playerDirection)
+      //   console.log("coord", coord)
+      //   setInteractCoord(coord)
+      //   setActive(ActiveComponent.terrainConsole)
+      // }
     },[interactCoord, playerDirection, playerPosition])
   
     
