@@ -5,16 +5,20 @@ import { useMUD } from "../../MUDContext";
 import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_width, map_height, max_width, max_height, Coord, terrain_width, terrain_height } from "../../constant";
 
 import { RenderParcel } from "./RenderParcel";
-import { RenderPlayer } from "./RenderPlayer";
+import { RenderPlayer, getInteractCoord } from "./RenderPlayer";
 
-import { MapProvider } from "../../utils/MapContext";
+import { MapProvider, PlayerDirection, useMapContext } from "../../utils/MapContext";
+import { useState, useEffect, useCallback } from "react";
+import { ActiveComponent } from "../../utils/useActiveComponent";
+import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
+import { MapMenu } from "../MapMenu/MapMenu";
 
 export const RenderMap = () => {
 
   const {
     components: { MapConfig, ParcelTerrain, Player, PlayerPosition},
     network: { playerEntity },
-    systemCalls: { wrapParcel2Map },
+    systemCalls: { wrapParcel2Map, crawlBy },
   } = useMUD();
 
   const hasPlayer = playerEntity !== undefined;
@@ -101,10 +105,51 @@ export const RenderMap = () => {
 
   console.log("map_screen_terrainMaps", map_screen_terrainMaps)
 
-  return (
-      <MapProvider>
-        
+  const {activeComponent, setActive, interactCoord, setInteractCoord} = useMapContext();
+  const [playerDirection, setPlayerDirection] = useState<PlayerDirection>(PlayerDirection.Up);
+
+  useEffect(() => {
+    setActive(ActiveComponent.map);
+  },[]);
+  
+    // ------ key inputs ------
+    const press_up = () => {
+      setPlayerDirection(PlayerDirection.Up);
+      crawlBy(0, -1);}
+  
+    const press_down = () => {
+      setPlayerDirection(PlayerDirection.Down);
+      crawlBy(0, 1);}
+  
+    const press_left = () => {
+      setPlayerDirection(PlayerDirection.Left);
+      crawlBy(-1, 0);}
+  
+    const press_right = () => {
+      setPlayerDirection(PlayerDirection.Right);
+      crawlBy(1, 0);}
+    
+    const press_a = useCallback(() => {
+      if (playerPosition !== undefined && playerDirection !== undefined) {
+        const coord = getInteractCoord(playerPosition, playerDirection)
+        console.log("coord", coord)
+        setInteractCoord(coord)
+        setActive(ActiveComponent.terrainConsole)
+      }
+    },[interactCoord, playerDirection, playerPosition])
+  
+    
+    const press_b = () => {return;}
+    const press_start = () => setActive(ActiveComponent.mapMenu);
+  
+    useKeyboardMovement(activeComponent == ActiveComponent.map, 
+      press_up, press_down, press_left, press_right, press_a, press_b, press_start)
+    
+
+
+  return (  
         <div className="w-full relative flex flex-col">
+              {activeComponent == ActiveComponent.mapMenu ? <MapMenu/> : null}
           {map_screen_terrainMaps.map((row, rowIndex) => (
             <div key={rowIndex} className="relative flex flex-row">
               {row.map((terrainInfo, columnIndex) => (
@@ -129,6 +174,5 @@ export const RenderMap = () => {
             </div>
           ))}
         </div>
-      </MapProvider>
   )
 }
