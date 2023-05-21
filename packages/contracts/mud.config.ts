@@ -76,6 +76,7 @@ export default mudConfig({
     PCLoan: {
       schema: {
         debtorID: "bytes32",       // player ID
+        startBlock: "uint256",
         duration: "uint256",      //block number
         collateral: "uint256",    // token amount
         interestRate: "uint32",

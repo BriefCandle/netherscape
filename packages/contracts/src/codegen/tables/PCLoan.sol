@@ -22,6 +22,7 @@ bytes32 constant PCLoanTableId = _tableId;
 
 struct PCLoanData {
   bytes32 debtorID;
+  uint256 startBlock;
   uint256 duration;
   uint256 collateral;
   uint32 interestRate;
@@ -30,11 +31,12 @@ struct PCLoanData {
 library PCLoan {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](4);
+    SchemaType[] memory _schema = new SchemaType[](5);
     _schema[0] = SchemaType.BYTES32;
     _schema[1] = SchemaType.UINT256;
     _schema[2] = SchemaType.UINT256;
-    _schema[3] = SchemaType.UINT32;
+    _schema[3] = SchemaType.UINT256;
+    _schema[4] = SchemaType.UINT32;
 
     return SchemaLib.encode(_schema);
   }
@@ -48,11 +50,12 @@ library PCLoan {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](4);
+    string[] memory _fieldNames = new string[](5);
     _fieldNames[0] = "debtorID";
-    _fieldNames[1] = "duration";
-    _fieldNames[2] = "collateral";
-    _fieldNames[3] = "interestRate";
+    _fieldNames[1] = "startBlock";
+    _fieldNames[2] = "duration";
+    _fieldNames[3] = "collateral";
+    _fieldNames[4] = "interestRate";
     return ("PCLoan", _fieldNames);
   }
 
@@ -112,12 +115,46 @@ library PCLoan {
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((debtorID)));
   }
 
+  /** Get startBlock */
+  function getStartBlock(bytes32 key) internal view returns (uint256 startBlock) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Get startBlock (using the specified store) */
+  function getStartBlock(IStore _store, bytes32 key) internal view returns (uint256 startBlock) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    return (uint256(Bytes.slice32(_blob, 0)));
+  }
+
+  /** Set startBlock */
+  function setStartBlock(bytes32 key, uint256 startBlock) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((startBlock)));
+  }
+
+  /** Set startBlock (using the specified store) */
+  function setStartBlock(IStore _store, bytes32 key, uint256 startBlock) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((startBlock)));
+  }
+
   /** Get duration */
   function getDuration(bytes32 key) internal view returns (uint256 duration) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -126,7 +163,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -135,7 +172,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((duration)));
+    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((duration)));
   }
 
   /** Set duration (using the specified store) */
@@ -143,7 +180,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((duration)));
+    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((duration)));
   }
 
   /** Get collateral */
@@ -151,7 +188,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -160,7 +197,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
@@ -169,7 +206,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 2, abi.encodePacked((collateral)));
+    StoreSwitch.setField(_tableId, _keyTuple, 3, abi.encodePacked((collateral)));
   }
 
   /** Set collateral (using the specified store) */
@@ -177,7 +214,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 2, abi.encodePacked((collateral)));
+    _store.setField(_tableId, _keyTuple, 3, abi.encodePacked((collateral)));
   }
 
   /** Get interestRate */
@@ -185,7 +222,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 4);
     return (uint32(Bytes.slice4(_blob, 0)));
   }
 
@@ -194,7 +231,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 4);
     return (uint32(Bytes.slice4(_blob, 0)));
   }
 
@@ -203,7 +240,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 3, abi.encodePacked((interestRate)));
+    StoreSwitch.setField(_tableId, _keyTuple, 4, abi.encodePacked((interestRate)));
   }
 
   /** Set interestRate (using the specified store) */
@@ -211,7 +248,7 @@ library PCLoan {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 3, abi.encodePacked((interestRate)));
+    _store.setField(_tableId, _keyTuple, 4, abi.encodePacked((interestRate)));
   }
 
   /** Get the full data */
@@ -233,8 +270,15 @@ library PCLoan {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, bytes32 debtorID, uint256 duration, uint256 collateral, uint32 interestRate) internal {
-    bytes memory _data = encode(debtorID, duration, collateral, interestRate);
+  function set(
+    bytes32 key,
+    bytes32 debtorID,
+    uint256 startBlock,
+    uint256 duration,
+    uint256 collateral,
+    uint32 interestRate
+  ) internal {
+    bytes memory _data = encode(debtorID, startBlock, duration, collateral, interestRate);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -247,11 +291,12 @@ library PCLoan {
     IStore _store,
     bytes32 key,
     bytes32 debtorID,
+    uint256 startBlock,
     uint256 duration,
     uint256 collateral,
     uint32 interestRate
   ) internal {
-    bytes memory _data = encode(debtorID, duration, collateral, interestRate);
+    bytes memory _data = encode(debtorID, startBlock, duration, collateral, interestRate);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -261,33 +306,36 @@ library PCLoan {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, PCLoanData memory _table) internal {
-    set(key, _table.debtorID, _table.duration, _table.collateral, _table.interestRate);
+    set(key, _table.debtorID, _table.startBlock, _table.duration, _table.collateral, _table.interestRate);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, PCLoanData memory _table) internal {
-    set(_store, key, _table.debtorID, _table.duration, _table.collateral, _table.interestRate);
+    set(_store, key, _table.debtorID, _table.startBlock, _table.duration, _table.collateral, _table.interestRate);
   }
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal pure returns (PCLoanData memory _table) {
     _table.debtorID = (Bytes.slice32(_blob, 0));
 
-    _table.duration = (uint256(Bytes.slice32(_blob, 32)));
+    _table.startBlock = (uint256(Bytes.slice32(_blob, 32)));
 
-    _table.collateral = (uint256(Bytes.slice32(_blob, 64)));
+    _table.duration = (uint256(Bytes.slice32(_blob, 64)));
 
-    _table.interestRate = (uint32(Bytes.slice4(_blob, 96)));
+    _table.collateral = (uint256(Bytes.slice32(_blob, 96)));
+
+    _table.interestRate = (uint32(Bytes.slice4(_blob, 128)));
   }
 
   /** Tightly pack full data using this table's schema */
   function encode(
     bytes32 debtorID,
+    uint256 startBlock,
     uint256 duration,
     uint256 collateral,
     uint32 interestRate
   ) internal view returns (bytes memory) {
-    return abi.encodePacked(debtorID, duration, collateral, interestRate);
+    return abi.encodePacked(debtorID, startBlock, duration, collateral, interestRate);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
