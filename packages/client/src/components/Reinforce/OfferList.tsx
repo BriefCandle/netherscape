@@ -3,6 +3,7 @@ import { Entity, Has, getComponentValue, getComponentValueStrict } from "@lattic
 import {useState} from 'react';
 import { useMUD } from "../../MUDContext";
 import { OfferCard } from "./OfferCard";
+import { OfferModal } from "./OfferModal";
 
 export const OfferList = (props:any) => {
 
@@ -80,7 +81,9 @@ export const OfferList = (props:any) => {
         <span className="text-teal-600 font-bold">Reinforcement</span>
       </div>
       {collapsed ? null : pcInstances.map(pc=>(
-        <OfferCard pcInstance={pc} />
+        <div className="">
+          <OfferCard pcInstance={pc} />
+        </div>
       ))}
     </div>
   </div>
