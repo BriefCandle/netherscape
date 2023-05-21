@@ -172,6 +172,16 @@ export function createSystemCalls(
   }
 
 
+  const applyOffer = async (entityId: string, duration: number) => {
+    try {
+      const tx = await worldSend("netherscape_ReinforceSystem_accept", [entityId, duration]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("apply successfully");
+    }
+  }
+
+
   return {
     spawn,
     crawlBy,
@@ -181,6 +191,7 @@ export function createSystemCalls(
     logout,
     attack,
     addressToBytes32,
-    bytes32ToInteger
+    bytes32ToInteger,
+    applyOffer
   };
 }

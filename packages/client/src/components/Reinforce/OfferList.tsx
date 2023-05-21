@@ -3,18 +3,23 @@ import { Entity, Has, getComponentValue, getComponentValueStrict } from "@lattic
 import {useState} from 'react';
 import { useMUD } from "../../MUDContext";
 import { OfferCard } from "./OfferCard";
+import { OfferModal } from "./OfferModal";
 
 export const OfferList = (props:any) => {
 
   const [collapsed, setCollapsed] = useState(false);
 
   const {
-    components: { MapConfig, ParcelTerrain, PlayerPosition},
+    components: { OfferEnabled, PCInstance},
     network: { playerEntity },
-    systemCalls: { wrapParcel2Map },
+    systemCalls: { wrapParcel2Map, crawlBy },
   } = useMUD();
 
-  const hasPlayer = playerEntity !== undefined;
+  const offers = useEntityQuery([Has(OfferEnabled), Has(PCInstance)]);
+  const pcInstances = offers.map( offer => {return  {...getComponentValueStrict(PCInstance, offer), id:offer };});
+
+
+  console.log("offers1111111111111111", offers, pcInstances)
 
   const mockPcInstances = [
     {
@@ -75,8 +80,10 @@ export const OfferList = (props:any) => {
         <span className="text-lg font-bold mr-2 cursor-pointer select-none" onClick={handleCollapse} >{collapsed? "➕" : "—"}</span>
         <span className="text-teal-600 font-bold">Reinforcement</span>
       </div>
-      {collapsed ? null : mockPcInstances.map(pc=>(
-        <OfferCard pcInstance={pc} />
+      {collapsed ? null : pcInstances.map(pc=>(
+        <div className="">
+          <OfferCard pcInstance={pc} />
+        </div>
       ))}
     </div>
   </div>
