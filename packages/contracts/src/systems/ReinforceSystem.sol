@@ -20,6 +20,12 @@ contract ReinforceSystem is System {
     uint32 public constant InterestRate = 200;              // 200 / 10000 = 2%
     uint256 public constant BlockPerDay = 200;
 
+    // should delete in prod
+    function mockOffer(bytes32 pcInstanceID) public {
+        
+        OfferEnabled.set(pcInstanceID, true);
+    }
+
 
     function offer(bytes32 pcInstanceID) public {
         require(!OfferEnabled.get(pcInstanceID), "already enabled");

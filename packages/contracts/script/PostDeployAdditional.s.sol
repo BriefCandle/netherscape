@@ -18,6 +18,8 @@ import { ParcelTemplateRightDown } from "./ParcelTemplate/ParcelTemplateRightDow
 import { CreateNewPCClass } from "./pc/CreateNewPCClass.s.sol";
 import { CreateNewAttackClass } from "./pc/CreateNewAttackClass.s.sol";
 
+import { MockOffer } from "./loan/MockOffer.s.sol";
+
 contract PostDeployAdditional is Script {
   function run(address worldAddress) external {
     IWorld world = IWorld(worldAddress);
@@ -34,6 +36,8 @@ contract PostDeployAdditional is Script {
 
     new CreateNewPCClass().run();
     new CreateNewAttackClass().run();
+
+    new MockOffer(worldAddress).run();
 
   }
 

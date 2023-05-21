@@ -1,4 +1,5 @@
 import { useMUD } from "../../MUDContext";
+import { getComponentValue } from "@latticexyz/recs";
 import pc1 from "../../assets/pokemon/1_front.png";
 import pc4 from "../../assets/pokemon/4_front.png";
 
@@ -36,17 +37,21 @@ export const OfferCard = (props:{pcInstance : any}) => {
   const pcInstance = props.pcInstance ?? mockPcInstance
 
   const {
+    components: { PCLoan, CommandedBy },
     network: { playerEntity },
   } = useMUD();
 
+  const pcLoan = getComponentValue(PCLoan, pcInstance.id);
+  // console.log("pcloan", pcLoan);
+  const owner = getComponentValue(CommandedBy, pcInstance.id)?.value.substr(26,64);
   
   return (
   <div className={`flex flex-row mt-2 pl-2 pr-3 pt-1 pb-3 bg-white border-2 ${pcInstance.pcClassID == "0x1234" ? "border-green-500" : "border-rose-400"} rounded-lg`}>
     <div className="flex flex-col justify-center items-center">
       <div className="text-lg font-bold w-28"> 
-        <img src={ pcInstance.pcClassID == "0x1234" ? pc1 : pc4 } className="w-28" />
+        <img src={ pcInstance.pcClassID == "0x0000000000000000000000000000000000000000000000000000000000000004" ? pc4 : pc1 } className="w-28" />
       </div>
-      <div className="w-full"> <HPBar hp={pcInstance.hp} maxHP={pcInstance.maxHP}/> </div>
+      <div className="w-full"> <HPBar hp={pcInstance.currentHP} maxHP={pcInstance.maxHP}/> </div>
     </div>
     <div className="flex flex-col items-center">
       <div className="flex flex-col h-28  my-auto justify-center "> 
@@ -55,7 +60,8 @@ export const OfferCard = (props:{pcInstance : any}) => {
               Name:
           </div>
           <div className="ml-3 font-bold text-gray-500 grow text-right">
-              {pcInstance.name}
+              {/* {pcInstance.name} */}
+              Good Boy
           </div>
         </div>
         <div className="flex flex-row">
@@ -63,7 +69,7 @@ export const OfferCard = (props:{pcInstance : any}) => {
               Owner:
           </div>
           <div className="ml-2 font-bold text-gray-500 grow text-right cursor-pointer ">
-            {pcInstance.owner.substr(0,6)}...{pcInstance.owner.substr(38,42)}
+            0x{owner.substr(0,4)}...{owner.substr(36,40)}
           </div>
         </div>
         <div className="flex flex-row mt-1">
@@ -80,7 +86,7 @@ export const OfferCard = (props:{pcInstance : any}) => {
                 SPD:
             </div>
             <div className="ml-2 font-bold text-right cursor-pointer ">
-              {pcInstance.atk}
+              {pcInstance.spd}
             </div>
           </div>
           <div className="flex mx-2">
@@ -88,7 +94,7 @@ export const OfferCard = (props:{pcInstance : any}) => {
                 PP:
             </div>
             <div className="ml-2 font-bold text-right cursor-pointer ">
-              {pcInstance.atk}
+              {pcInstance.maxPP}
             </div>
           </div>
           
@@ -96,7 +102,7 @@ export const OfferCard = (props:{pcInstance : any}) => {
       </div>
       <div className="flex mt-3 ml-auto "> 
         <button className="px-2 pb-1 my-auto bg-green-500 hover:bg-green-700 transition ease-in-out delay-75 text-white rounded text-lg font-semibold"> Apply </button> 
-        {pcInstance.debtorID == playerEntity && (<button className="ml-2 px-2 pb-1 my-auto bg-orange-500 hover:bg-orange-700 transition ease-in-out delay-75 text-white rounded text-lg font-semibold"> Finish </button> )}
+        {pcLoan?.debtorID == playerEntity && (<button className="ml-2 px-2 pb-1 my-auto bg-orange-500 hover:bg-orange-700 transition ease-in-out delay-75 text-white rounded text-lg font-semibold"> Finish </button> )}
       </div>
     </div>
   </div>
