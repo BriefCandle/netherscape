@@ -155,8 +155,6 @@ export function createSystemCalls(
 
   return {
     spawn,
-    respawn,
-    logout,
     crawlBy,
     wrapParcel2Map,
     siege,
