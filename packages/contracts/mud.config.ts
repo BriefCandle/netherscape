@@ -78,7 +78,7 @@ export default mudConfig({
         debtorID: "bytes32",       // player ID
         duration: "uint256",      //block number
         collateral: "uint256",    // token amount
-        interestRate: "int32",
+        interestRate: "uint32",
       }
     },
 

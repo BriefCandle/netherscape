@@ -43,7 +43,7 @@ export const GameBoard = () => {
         </div>
 
       </div>
-      <OfferList />
+      <div className="relative"><OfferList /></div>
     </div>
 
   )

@@ -69,14 +69,16 @@ export const OfferList = (props:any) => {
   }
  
   return (
-  <div className={`p-2 bg-lime-200 text-black rounded-lg overflow-scroll no-scrollbar mx-2 ${collapsed ? "w-10" : "w-full"} transition-width transition-slowest ease`} style={{height:604}} >
-    <div className="header">
-      <span className="text-lg font-bold mr-2 cursor-pointer select-none" onClick={handleCollapse} >{collapsed? "➕" : "—"}</span>
-      <span className="text-teal-600 font-bold">Reinforcement</span>
+  <div className="absolute mx-2 bg-lime-200 text-black rounded-lg" >
+    <div className={`p-2 bg-lime-200 text-black rounded-lg overflow-scroll no-scrollbar ${collapsed ? "w-10" : "w-full"} transition-width transition-slowest ease`}  style={{height:604}}>
+      <div className="header">
+        <span className="text-lg font-bold mr-2 cursor-pointer select-none" onClick={handleCollapse} >{collapsed? "➕" : "—"}</span>
+        <span className="text-teal-600 font-bold">Reinforcement</span>
+      </div>
+      {collapsed ? null : mockPcInstances.map(pc=>(
+        <OfferCard pcInstance={pc} />
+      ))}
     </div>
-    {collapsed ? null : mockPcInstances.map(pc=>(
-      <OfferCard pcInstance={pc} />
-    ))}
   </div>
   )
 }
