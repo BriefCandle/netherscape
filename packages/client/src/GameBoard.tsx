@@ -2,6 +2,7 @@ import { useComponentValue } from "@latticexyz/react";
 import { RenderMap } from "./components/Map/RenderMap";
 import { useMUD } from "./MUDContext";
 import { OfferList } from "./components/Reinforce/OfferList";
+import { MapProvider } from "./utils/MapContext";
 
 
 export const GameBoard = () => {
@@ -34,7 +35,12 @@ export const GameBoard = () => {
 
         { canSpawn ? <button className="bg-green-500" onClick={spawn}>Spawn</button> : null}
 
-        <div className="game h-full w-full"> <RenderMap /></div>
+        <div className="game h-full w-full"> 
+        <MapProvider>
+          <RenderMap />
+        </MapProvider>
+        
+        </div>
 
       </div>
       <div className="relative"><OfferList /></div>
