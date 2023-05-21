@@ -183,7 +183,6 @@ export function createSystemCalls(
     wrapParcel2Map,
     siege,
     unsiege,
-    isSieged,
     logout
   };
 }

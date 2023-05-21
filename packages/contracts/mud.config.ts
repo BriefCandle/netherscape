@@ -90,6 +90,11 @@ export default mudConfig({
       args: [resolveTableId("PlayerPosition")],
     },
     {
+      name: "KeysInTableModule",
+      root: true,
+      args: [resolveTableId("SiegedBy")],
+    },
+    {
       name: "KeysWithValueModule",
       root: true,
       args: [resolveTableId("PlayerPosition")]

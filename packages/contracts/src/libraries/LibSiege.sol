@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 
 import { SiegedBy, SiegedByTableId, PlayerPosition, ParcelTerrain, MapConfig, Obstruction, Player } from "../codegen/Tables.sol";
 import { ParcelType, TerrainType } from "../codegen/Types.sol";
+import { hasKey } from "@latticexyz/world/src/modules/keysintable/hasKey.sol";
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 import { parcel_width, parcel_height, Coord, map_width, map_height, max_width, max_height } from "../systems/MapSystem.sol";
 
@@ -17,6 +18,12 @@ library LibSiege {
   function isPlayerSiege(bytes32 player) internal view returns (bool) {
     bytes32[] memory parcelIDs = getKeysWithValue(SiegedByTableId, SiegedBy.encode(player));
     return parcelIDs.length != 0;
+  }
+
+  function isParcelSieged(bytes32 parcelID) internal view returns (bool) {
+    bytes32[] memory keyTuple = new bytes32[](1);
+    keyTuple[0] = parcelID;
+    return hasKey(SiegedByTableId, keyTuple);
   }
 
   function getPlayerFromParcelID(bytes32 parcelID) internal view returns (bytes32 player) {
