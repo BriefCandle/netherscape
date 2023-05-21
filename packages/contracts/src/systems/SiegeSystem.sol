@@ -24,6 +24,8 @@ contract SiegeSystem is System {
     bytes32 parcelID = LibMap.getPlayerParcelID(player);
 
     require(!LibSiege.isParcelSieged(parcelID), "Siege: parcel is sieged");
+
+    // TODO: add other requires
     
     SiegedBy.set(parcelID, player);
   }

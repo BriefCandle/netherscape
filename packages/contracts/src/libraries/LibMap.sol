@@ -105,7 +105,7 @@ library LibMap {
   // player ->  parcel2map coord
   function getPlayerParcelCoord(bytes32 player) internal view returns (uint16 parcel2map_x, uint16 parcel2map_y) {
     (uint16 map_x, uint16 map_y) = PlayerPosition.get(player);
-    ( , , uint16 parcel2map_x, uint16 parcel2map_y) = coordMapToParcel(map_x, map_y);
+    ( , , parcel2map_x, parcel2map_y) = coordMapToParcel(map_x, map_y);
   }
 
   // player -> parcel2map coord -> parcelID

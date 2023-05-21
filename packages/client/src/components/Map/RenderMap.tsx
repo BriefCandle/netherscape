@@ -2,19 +2,31 @@ import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { Entity, Has, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { ethers } from 'ethers';
 import { useMUD } from "../../MUDContext";
+
+import ethan_up from "../../assets/player/ethan_up.png";
+import ethan_down from "../../assets/player/ethan_down.png";
+import ethan_left from "../../assets/player/ethan_left.png";
+import ethan_right from "../../assets/player/ethan_right.png";
+
+
+
 import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_width, map_height, max_width, max_height, Coord, terrain_width, terrain_height } from "../../constant";
 
 import { RenderParcel } from "./RenderParcel";
-import { RenderPlayer } from "./RenderPlayer";
+import { RenderPlayer, getInteractCoord } from "./RenderPlayer";
 
-import { MapProvider } from "../../utils/MapContext";
+import { MapProvider, PlayerDirection, useMapContext } from "../../utils/MapContext";
+import { useState, useEffect, useCallback } from "react";
+import { ActiveComponent } from "../../utils/useActiveComponent";
+import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
+import { MapMenu } from "../MapMenu/MapMenu";
 
 export const RenderMap = () => {
 
   const {
     components: { MapConfig, ParcelTerrain, Player, PlayerPosition},
     network: { playerEntity },
-    systemCalls: { wrapParcel2Map },
+    systemCalls: { wrapParcel2Map, crawlBy },
   } = useMUD();
 
   const hasPlayer = playerEntity !== undefined;
@@ -31,6 +43,7 @@ export const RenderMap = () => {
       };
   });
 
+  console.log('---- other players ----')
   console.log(otherPlayers)
 
   
@@ -93,7 +106,6 @@ export const RenderMap = () => {
 
   const map_screen_terrainMaps = map_screen.map(row => row.map((coord)=>{
     const [wrappedX, wrappedY] = wrapParcel2Map(coord.x, coord.y);
-    console.log(wrappedX, wrappedY)
     const parcelType = map_matrix[wrappedY][wrappedX];
     const parcelID = getParcelID(wrappedX, wrappedY, parcelType);
     const terrainMap = getComponentValue(ParcelTerrain, parcelID as Entity)?.value
@@ -102,24 +114,70 @@ export const RenderMap = () => {
 
   console.log("map_screen_terrainMaps", map_screen_terrainMaps)
 
-  return (
-      <MapProvider>
-        
+  const {activeComponent, setActive, interactCoord, setInteractCoord} = useMapContext();
+  const [playerDirection, setPlayerDirection] = useState<PlayerDirection>(PlayerDirection.Up);
+  const [playerImage,setPlayerImage] = useState(ethan_up);
+
+  useEffect(() => {
+    setActive(ActiveComponent.map);
+  },[]);
+  
+    // ------ key inputs ------
+    const press_up = () => {
+      setPlayerDirection(PlayerDirection.Up);
+      setPlayerImage(ethan_up);
+      crawlBy(0, -1);}
+  
+    const press_down = () => {
+      setPlayerDirection(PlayerDirection.Down);
+      setPlayerImage(ethan_down);
+      crawlBy(0, 1);}
+  
+    const press_left = () => {
+      setPlayerDirection(PlayerDirection.Left);
+      setPlayerImage(ethan_left);
+      crawlBy(-1, 0);}
+  
+    const press_right = () => {
+      setPlayerDirection(PlayerDirection.Right);
+      setPlayerImage(ethan_right);
+      crawlBy(1, 0);}
+    
+    const press_a = useCallback(() => {
+      // if (playerPosition !== undefined && playerDirection !== undefined) {
+      //   const coord = getInteractCoord(playerPosition, playerDirection)
+      //   console.log("coord", coord)
+      //   setInteractCoord(coord)
+      //   setActive(ActiveComponent.terrainConsole)
+      // }
+    },[interactCoord, playerDirection, playerPosition])
+  
+    
+    const press_b = () => {return;}
+    const press_start = () => setActive(ActiveComponent.mapMenu);
+  
+    useKeyboardMovement(activeComponent == ActiveComponent.map, 
+      press_up, press_down, press_left, press_right, press_a, press_b, press_start)
+    
+
+
+  return (  
         <div className="w-full relative flex flex-col">
+              {activeComponent == ActiveComponent.mapMenu ? <MapMenu/> : null}
           {map_screen_terrainMaps.map((row, rowIndex) => (
             <div key={rowIndex} className="relative flex flex-row">
               {row.map((terrainInfo, columnIndex) => (
                 <div key={columnIndex} 
                 className="relative flex flex-row">
                   {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
-                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} />
+                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} playerImage={playerImage} />
                     : null}
 
                   {
                     otherPlayers.map((otherPlayer) => {
                       const {parcel_x, parcel_y, parcel2map_x, parcel2map_y} = coordMapToParcel(otherPlayer.position.x, otherPlayer.position.y);
                       if(parcel2map_x == terrainInfo.coord.x && parcel2map_y == terrainInfo.coord.y)
-                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} />)
+                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} playerImage={ethan_down}/>)
                       return null;
                     })
                   }
@@ -130,6 +188,5 @@ export const RenderMap = () => {
             </div>
           ))}
         </div>
-      </MapProvider>
   )
 }

@@ -5,6 +5,8 @@ import { Script } from "forge-std/Script.sol";
 import { console } from "forge-std/console.sol";
 import { IWorld } from "../src/codegen/world/IWorld.sol";
 
+import { PostDeployAdditional } from "./PostDeployAdditional.s.sol";
+
 contract PostDeploy is Script {
   function run(address worldAddress) external {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -15,6 +17,8 @@ contract PostDeploy is Script {
     // console.log("Init map");
 
     vm.stopBroadcast();
+
+    new PostDeployAdditional().run(worldAddress);
   }
 
   function initMapConfig(IWorld world) internal {

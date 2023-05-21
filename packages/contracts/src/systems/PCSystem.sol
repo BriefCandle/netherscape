@@ -22,9 +22,9 @@ contract PCSystem is System {
   // Note: a "cheat" function only for convenience during hackathon
   // can be used in script or when spawn new player
   // TODO: later, add access control
-  function spawnPC(bytes32 pcClassID, bytes32 player) public {
+  function spawnPC(bytes32 pcClassID, bytes32 player) public returns (bytes32 key) {
     PCClassData memory pcClass = PCClass.get(pcClassID);
-    bytes32 key = keccak256(abi.encode(player, pcClassID, ++nonce));
+    key = keccak256(abi.encode(player, pcClassID, ++nonce));
     PCInstance.set(key, PCInstanceData(
       pcClassID, pcClass.maxHP, pcClass.atk, pcClass.spd, 
       pcClass.maxPP, pcClass.maxHP, 0, pcClass.attackIDs));

@@ -208,6 +208,7 @@ export function defineContractComponents(world: World) {
         world,
         {
           debtorID: RecsType.String,
+          startBlock: RecsType.BigInt,
           duration: RecsType.BigInt,
           collateral: RecsType.BigInt,
           interestRate: RecsType.Number,

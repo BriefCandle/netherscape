@@ -35,5 +35,9 @@ library LibBattle {
     return BattleWith.get(attacker);
   }
 
+  function isPlayersInBattle(bytes32 playerA, bytes32 playerB) internal view returns (bool) {
+    return BattleWith.get(playerA) == playerB || BattleWith.get(playerB) == playerA;
+  }
+
 
 }

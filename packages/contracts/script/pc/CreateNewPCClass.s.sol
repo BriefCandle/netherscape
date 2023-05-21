@@ -23,7 +23,7 @@ contract CreateNewPCClass is Script {
 
     createNewPCClass(1, PCClassData(220, 6,	15,	15,	[LibUtils.numberToEntityKey(0), LibUtils.numberToEntityKey(2)], "Luigi"));
 
-    createNewPCClass(2, PCClassData(200,	5,	20,	13,	[LibUtils.numberToEntityKey(1), LibUtils.numberToEntityKey(4)], "Princess Peach"));
+    createNewPCClass(2, PCClassData(200,	5,	20,	13,	[LibUtils.numberToEntityKey(1), LibUtils.numberToEntityKey(4)], "Princess_Peach"));
 
     createNewPCClass(3, PCClassData(300,	6,	10,	15,	[LibUtils.numberToEntityKey(1), LibUtils.numberToEntityKey(3)], "Toad"));
 

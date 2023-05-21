@@ -17,6 +17,16 @@ export function createSystemCalls(
   }: ClientComponents
 ) {
 
+  const addressToBytes32 = (address: string) => {
+    return ethers.utils.hexZeroPad(ethers.utils.hexlify(address), 32);
+  }
+
+  const bytes32ToInteger = (bytes32: string): string => {
+    const bigNumber = ethers.BigNumber.from(bytes32);
+    const paddedNumberString = ethers.utils.hexZeroPad(bigNumber.toHexString(), 1);
+    return paddedNumberString
+  }
+
   // comply with LibMap.distance
   const wrapPosition = (x: number, y: number) => {
     const wrappedX = x < 0 ? max_width - 1: (x > max_width - 1 ? 0 : x);
@@ -176,6 +186,34 @@ export function createSystemCalls(
     }
   }
 
+  const attack = async(attacker_pcID: string, target_pcID: string, attackID: string) => {
+    try {
+      const tx = await worldSend("netherscape_BattleSystem_attack", [attacker_pcID, target_pcID, attackID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("attack successfully");
+    }
+  }
+
+
+  const applyOffer = async (entityId: string, duration: number) => {
+    try {
+      const tx = await worldSend("netherscape_ReinforceSystem_accept", [entityId, duration]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("apply successfully");
+    }
+  }
+
+  const liquidateOffer = async (entityId: string) => {
+    try {
+      const tx = await worldSend("netherscape_ReinforceSystem_liquidate", [entityId]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("liquidate successfully");
+    }
+  }
+
 
   return {
     spawn,
@@ -183,6 +221,11 @@ export function createSystemCalls(
     wrapParcel2Map,
     siege,
     unsiege,
-    logout
+    logout,
+    attack,
+    addressToBytes32,
+    bytes32ToInteger,
+    applyOffer,
+    liquidateOffer
   };
 }
