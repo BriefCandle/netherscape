@@ -1,7 +1,4 @@
-import ethan_up from "../../assets/player/ethan_up.png";
-import ethan_down from "../../assets/player/ethan_down.png";
-import ethan_left from "../../assets/player/ethan_left.png";
-import ethan_right from "../../assets/player/ethan_right.png";
+
 import { terrain_width, terrain_height } from "../../constant";
 import { PlayerDirection, useMapContext } from "../../utils/MapContext";
 import { useCallback, useEffect, useState } from "react";
@@ -25,11 +22,17 @@ export const getInteractCoord = (coord: {x: number, y: number}, direction: Playe
   }
 }
 
-export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPosition: any}) => {
-  const {parcel_x, parcel_y, playerPosition} = props;
+
+
+
+export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPosition: any,playerImage:any}) => {
+  const {parcel_x, parcel_y, playerPosition, playerImage} = props;
   console.log(parcel_x, parcel_y, playerPosition)
   const {x, y} = playerPosition;
 
+ 
+
+ 
 
   return (
   <>
@@ -40,7 +43,7 @@ export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPos
         top: terrain_height * parcel_y,
         width: terrain_width, height: terrain_height,
     }}>
-      <img style={{width: '45px', height: "35px"}} src={ethan_down} alt="" />
+      <img style={{width: '45px', height: "35px"}} src={playerImage} alt="" />
     </div> 
   </>
   )
