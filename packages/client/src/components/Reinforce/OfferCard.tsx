@@ -41,20 +41,19 @@ export const OfferCard = (props:{pcInstance : any}) => {
   const {
     components: { PCLoan, CommandedBy },
     network: { playerEntity },
-    systemCalls: { applyOffer },
+    systemCalls: { applyOffer, addressToBytes32 },
   } = useMUD();
 
   const pcLoan = getComponentValue(PCLoan, pcInstance.id);
-  // console.log("pcloan", pcLoan);
+  console.log("pcloan", pcLoan, playerEntity as Entity);
   const owner = getComponentValue(CommandedBy, pcInstance.id)?.value.substr(26,64);
 
 
   const handleApply = () => {
-    // applyOffer(pcInstance.id, 1000);   //rent for 1000 blocks
     setProcessing(true);
-    setTimeout(() => {
+    applyOffer(pcInstance.id, 1000).then(res=>{
       setProcessing(false);
-    },3000)
+    });   //rent for 1000 blocks
   }
   
   return (
@@ -123,7 +122,7 @@ export const OfferCard = (props:{pcInstance : any}) => {
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>)}
           {!!pcLoan? "Busy": processing ? "Processing..." : "Apply"}</button>
-        {pcLoan?.debtorID == playerEntity && (<button className="ml-2 px-2 pb-1 my-auto bg-orange-500 hover:bg-orange-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold"> Finish </button> )}
+        {pcLoan?.debtorID == addressToBytes32(playerEntity) && (<button className="ml-2 px-2 pb-1 my-auto bg-orange-500 hover:bg-orange-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold"> Finish </button> )}
       </div>
     </div>
   </div>
