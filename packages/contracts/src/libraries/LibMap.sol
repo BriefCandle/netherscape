@@ -102,6 +102,18 @@ library LibMap {
     keysAtPosition = getKeysWithValue(PlayerPositionTableId, PlayerPosition.encode(map_x, map_y));
   }
 
+  // player ->  parcel2map coord
+  function getPlayerParcelCoord(bytes32 player) internal view returns (uint16 parcel2map_x, uint16 parcel2map_y) {
+    (uint16 map_x, uint16 map_y) = PlayerPosition.get(player);
+    ( , , parcel2map_x, parcel2map_y) = coordMapToParcel(map_x, map_y);
+  }
+
+  // player -> parcelID
+  function getPlayerParcelID(bytes32 player) internal view returns (bytes32 parcelID) {
+    (uint16 parcel2map_x, uint16 parcel2map_y) = getPlayerParcelCoord(player);
+    parcelID = hashParcelID(parcel2map_x, parcel2map_y);
+  }
+
 
   function distance(uint16 from_x, uint16 from_y, uint16 to_x, uint16 to_y) internal pure returns (uint16) {
     uint16 deltaX = from_x > to_x ? from_x - to_x : to_x - from_x;

@@ -3,6 +3,8 @@ import { useState } from "react";
 // mainly for user input
 export enum ActiveComponent {
   "map",
+  "mapMenu",
+  "menu",
   "terrainConsole",
   "nurse",
   "pc",
@@ -13,7 +15,6 @@ export enum ActiveComponent {
   "pcOwnedMenu",
   "pcPokemon",
   "pcSwitch",
-  "menu",
   "otherPlayerMenu",
   "offerorWait",
   "offereeMenu",

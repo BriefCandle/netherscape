@@ -26,3 +26,10 @@ forge script --rpc-url http://localhost:8545 --broadcast script/parcelTemplate/P
 
 echo "submit ParcelTemplateUp"
 forge script --rpc-url http://localhost:8545 --broadcast script/parcelTemplate/ParcelTemplateUp.s.sol:ParcelTemplateUp
+
+echo "create CreateNewAttackClass"
+forge script --rpc-url http://localhost:8545 --broadcast script/pc/CreateNewAttackClass.s.sol:CreateNewAttackClass 
+
+echo "create CreateNewPCClass"
+forge script --rpc-url http://localhost:8545 --broadcast script/pc/CreateNewPCClass.s.sol:CreateNewPCClass 
+

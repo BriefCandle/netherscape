@@ -5,20 +5,39 @@ import { useMUD } from "../../MUDContext";
 import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_width, map_height, max_width, max_height, Coord, terrain_width, terrain_height } from "../../constant";
 
 import { RenderParcel } from "./RenderParcel";
-import { RenderPlayer } from "./RenderPlayer";
-import { MapProvider } from "../../utils/MapContext";
+import { RenderPlayer, getInteractCoord } from "./RenderPlayer";
+
+import { MapProvider, PlayerDirection, useMapContext } from "../../utils/MapContext";
+import { useState, useEffect, useCallback } from "react";
+import { ActiveComponent } from "../../utils/useActiveComponent";
+import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
+import { MapMenu } from "../MapMenu/MapMenu";
 
 export const RenderMap = () => {
 
   const {
-    components: { MapConfig, ParcelTerrain, PlayerPosition},
+    components: { MapConfig, ParcelTerrain, Player, PlayerPosition},
     network: { playerEntity },
-    systemCalls: { wrapParcel2Map },
+    systemCalls: { wrapParcel2Map, crawlBy },
   } = useMUD();
 
   const hasPlayer = playerEntity !== undefined;
   const hasPlayerPosition = hasPlayer ? getComponentValue(PlayerPosition, playerEntity) !== undefined : false
   const playerPosition = useComponentValue(PlayerPosition, playerEntity) // : {x:0, y:0};
+
+  const otherPlayers = useEntityQuery([Has(Player), Has(PlayerPosition)])
+    .filter((entity) => entity !== playerEntity)
+    .map((entity) => {
+      const position = getComponentValueStrict(PlayerPosition, entity);
+      return {
+        entity,
+        position,
+      };
+  });
+
+  console.log(otherPlayers)
+
+  
 
   // --------- get player's coord on map: 1 absolute coord -> 2 x relative ---------
   const coordMapToParcel = (map_x: number, map_y: number) => {
@@ -43,7 +62,7 @@ export const RenderMap = () => {
   }
 
   const map_matrix = convertMapIteratorToArray(parcelTypes);
-  console.log(map_matrix)
+  console.log("map_matrix", map_matrix)
 
   // --------- get a smaller map based on player's parcel coord ---------
   const loopMap = (parcel2map_coord: Coord) => {
@@ -61,7 +80,7 @@ export const RenderMap = () => {
       map_screen[j][i] = loopMap({x: parcel2map_x - Math.floor(screen_width/2) + i, y: parcel2map_y - Math.floor(screen_height/2) + j})
     }
   }
-  console.log(map_screen)
+  console.log("map_screen", map_screen)
 
   // --------- get terrainMap for map_screen ---------
   const getParcelID = (parcel2map_x: number, parcel2map_y: number, parcelType: number) => {
@@ -81,47 +100,79 @@ export const RenderMap = () => {
     const parcelType = map_matrix[wrappedY][wrappedX];
     const parcelID = getParcelID(wrappedX, wrappedY, parcelType);
     const terrainMap = getComponentValue(ParcelTerrain, parcelID as Entity)?.value
-    return terrainMap
+    return {terrainMap: terrainMap, coord: {x: wrappedX, y: wrappedY}}
   }))
 
   console.log("map_screen_terrainMaps", map_screen_terrainMaps)
 
-  return (
-  <>
-  <div>
-    {
-      <div>
-        {map_screen_terrainMaps.map((row, rowIndex) => (
-          <div key={rowIndex}>
-            {row.map((terrainMap, columnIndex) => (
-              <div key={columnIndex} style={{
-                position: 'relative', 
-                left: columnIndex * parcel_width* terrain_width, 
-                top: rowIndex * parcel_height * terrain_height
-              }}>
-                { playerPosition && rowIndex === Math.floor(screen_height/2) && columnIndex === Math.floor(screen_width/2) ? 
-                <MapProvider>
-                  <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition}/>
-                </MapProvider>
-                 : null}
+  const {activeComponent, setActive, interactCoord, setInteractCoord} = useMapContext();
+  const [playerDirection, setPlayerDirection] = useState<PlayerDirection>(PlayerDirection.Up);
 
-                <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainMap={terrainMap}/>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    }
-  </div>
-  <style>
-  {`
-  .parcel {
-    position: 'relative', 
-    left: columnIndex * parcel_width* terrain_width, 
-    top: rowIndex * parcel_height * terrain_height
-  }
-  `}
-  </style>
-  </>
+  useEffect(() => {
+    setActive(ActiveComponent.map);
+  },[]);
+  
+    // ------ key inputs ------
+    const press_up = () => {
+      setPlayerDirection(PlayerDirection.Up);
+      crawlBy(0, -1);}
+  
+    const press_down = () => {
+      setPlayerDirection(PlayerDirection.Down);
+      crawlBy(0, 1);}
+  
+    const press_left = () => {
+      setPlayerDirection(PlayerDirection.Left);
+      crawlBy(-1, 0);}
+  
+    const press_right = () => {
+      setPlayerDirection(PlayerDirection.Right);
+      crawlBy(1, 0);}
+    
+    const press_a = useCallback(() => {
+      if (playerPosition !== undefined && playerDirection !== undefined) {
+        const coord = getInteractCoord(playerPosition, playerDirection)
+        console.log("coord", coord)
+        setInteractCoord(coord)
+        setActive(ActiveComponent.terrainConsole)
+      }
+    },[interactCoord, playerDirection, playerPosition])
+  
+    
+    const press_b = () => {return;}
+    const press_start = () => setActive(ActiveComponent.mapMenu);
+  
+    useKeyboardMovement(activeComponent == ActiveComponent.map, 
+      press_up, press_down, press_left, press_right, press_a, press_b, press_start)
+    
+
+
+  return (  
+        <div className="w-full relative flex flex-col">
+              {activeComponent == ActiveComponent.mapMenu ? <MapMenu/> : null}
+          {map_screen_terrainMaps.map((row, rowIndex) => (
+            <div key={rowIndex} className="relative flex flex-row">
+              {row.map((terrainInfo, columnIndex) => (
+                <div key={columnIndex} 
+                className="relative flex flex-row">
+                  {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
+                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} />
+                    : null}
+
+                  {
+                    otherPlayers.map((otherPlayer) => {
+                      const {parcel_x, parcel_y, parcel2map_x, parcel2map_y} = coordMapToParcel(otherPlayer.position.x, otherPlayer.position.y);
+                      if(parcel2map_x == terrainInfo.coord.x && parcel2map_y == terrainInfo.coord.y)
+                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} />)
+                      return null;
+                    })
+                  }
+
+                  <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainInfo={terrainInfo} />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
   )
 }

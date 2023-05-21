@@ -81,5 +81,145 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    PCClass: (() => {
+      const tableId = new TableId("netherscape", "PCClass");
+      return defineComponent(
+        world,
+        {
+          maxHP: RecsType.Number,
+          atk: RecsType.Number,
+          spd: RecsType.Number,
+          maxPP: RecsType.Number,
+          attackIDs: RecsType.StringArray,
+          className: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    PCInstance: (() => {
+      const tableId = new TableId("netherscape", "PCInstance");
+      return defineComponent(
+        world,
+        {
+          pcClassID: RecsType.String,
+          maxHP: RecsType.Number,
+          atk: RecsType.Number,
+          spd: RecsType.Number,
+          maxPP: RecsType.Number,
+          currentHP: RecsType.Number,
+          blockStarts: RecsType.BigInt,
+          attackIDs: RecsType.StringArray,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    AttackClass: (() => {
+      const tableId = new TableId("netherscape", "AttackClass");
+      return defineComponent(
+        world,
+        {
+          power: RecsType.Number,
+          pp: RecsType.Number,
+          crit: RecsType.Number,
+          attackType: RecsType.Number,
+          className: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    CommandedBy: (() => {
+      const tableId = new TableId("netherscape", "CommandedBy");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    BattleWith: (() => {
+      const tableId = new TableId("netherscape", "BattleWith");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    SiegedBy: (() => {
+      const tableId = new TableId("netherscape", "SiegedBy");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    OfferEnabled: (() => {
+      const tableId = new TableId("netherscape", "OfferEnabled");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    PCLoan: (() => {
+      const tableId = new TableId("netherscape", "PCLoan");
+      return defineComponent(
+        world,
+        {
+          debtorID: RecsType.String,
+          startBlock: RecsType.BigInt,
+          duration: RecsType.BigInt,
+          collateral: RecsType.BigInt,
+          interestRate: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

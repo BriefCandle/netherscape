@@ -2,7 +2,11 @@ import { useComponentValue } from "@latticexyz/react";
 import { SyncState } from "@latticexyz/network";
 import { useMUD } from "./MUDContext";
 import { GameBoard } from "./GameBoard";
+<<<<<<< HEAD
 import "./assets/css/tailwind.css";
+=======
+import "./theme/tailwind.css";
+>>>>>>> reinforce
 
 export const App = () => {
   const {

@@ -125,47 +125,42 @@ export function createSystemCalls(
   
   }
 
-  const respawn = async() => {
-    if (!playerEntity) {
-      throw new Error("no player");
-    }
-
-    const canReSpawn = getComponentValue(Player, playerEntity)?.value == true;
-    if (!canReSpawn) {
-      throw new Error("not yet spawned");
-    }
-
+  const siege = async() => {
     try {
-      const tx = await worldSend("netherscape_CrawlSystem_respawn", []);
+      const tx = await worldSend("netherscape_SiegeSystem_siege", []);
       await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
     } finally {
-      console.log("respawn succesffully")
+      console.log("siege successfully");
+    }
+  }
+
+  const unsiege = async() => {
+    try {
+      const tx = await worldSend("netherscape_SiegeSystem_unsiege", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("unsiege successfully");
     }
   }
 
   const logout = async() => {
-    if (!playerEntity) {
-      throw new Error("no player");
-    }
-
-    const canLogout = getComponentValue(Player, playerEntity)?.value == true;
-    if (!canLogout) {
-      throw new Error("not yet spawned");
-    }
-
     try {
       const tx = await worldSend("netherscape_CrawlSystem_logout", []);
       await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
     } finally {
-      console.log("logout succesffully")
+      console.log("logout successfully");
     }
   }
+
 
   return {
     spawn,
     respawn,
     logout,
     crawlBy,
-    wrapParcel2Map
+    wrapParcel2Map,
+    siege,
+    unsiege,
+    logout
   };
 }

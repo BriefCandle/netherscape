@@ -38,25 +38,22 @@ export const RenderTerrain = (props: {rowIndex: number, columnIndex: number, ter
       return (
         <img key={`${columnIndex},${rowIndex}`}
         src={imageSrc}  
+        className="relative flex flex-row flex-wrap"
         // style={{gridColumn: x + 1, gridRow: y + 1, width:terrainWidth/2, grid:"none"}}
-        style={{position: 'relative', left: terrain_width/2*x, top: terrain_width/2*y,
-        width: terrain_width/2, height: terrain_width/2,
-        display: 'flex', flexDirection: 'row', flexWrap: 'wrap', }}
+        style={{
+          left: terrain_width/2*x, 
+          top: terrain_width/2*y,
+          width: terrain_width/2, 
+          height: terrain_width/2,
+        }}
         /> 
       )}
     )
   )
 
   return (
-    <div
-        style={{
-            display: 'flex', flexDirection: 'row', flexWrap: 'wrap', }}
-    >
+    <div className="flex flew-col flex-wrap">
       {tiles}
     </div>
-  )
-  return (
-  <>
-  </>
   )
 }

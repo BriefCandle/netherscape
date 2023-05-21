@@ -8,3 +8,11 @@ import { ParcelTerrain, ParcelTerrainTableId } from "./tables/ParcelTerrain.sol"
 import { Obstruction, ObstructionTableId } from "./tables/Obstruction.sol";
 import { Player, PlayerTableId } from "./tables/Player.sol";
 import { PlayerPosition, PlayerPositionTableId } from "./tables/PlayerPosition.sol";
+import { PCClass, PCClassData, PCClassTableId } from "./tables/PCClass.sol";
+import { PCInstance, PCInstanceData, PCInstanceTableId } from "./tables/PCInstance.sol";
+import { AttackClass, AttackClassData, AttackClassTableId } from "./tables/AttackClass.sol";
+import { CommandedBy, CommandedByTableId } from "./tables/CommandedBy.sol";
+import { BattleWith, BattleWithTableId } from "./tables/BattleWith.sol";
+import { SiegedBy, SiegedByTableId } from "./tables/SiegedBy.sol";
+import { OfferEnabled, OfferEnabledTableId } from "./tables/OfferEnabled.sol";
+import { PCLoan, PCLoanData, PCLoanTableId } from "./tables/PCLoan.sol";
