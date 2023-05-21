@@ -181,6 +181,15 @@ export function createSystemCalls(
     }
   }
 
+  const liquidateOffer = async (entityId: string) => {
+    try {
+      const tx = await worldSend("netherscape_ReinforceSystem_liquidate", [entityId]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("liquidate successfully");
+    }
+  }
+
 
   return {
     spawn,
@@ -192,6 +201,7 @@ export function createSystemCalls(
     attack,
     addressToBytes32,
     bytes32ToInteger,
-    applyOffer
+    applyOffer,
+    liquidateOffer
   };
 }

@@ -37,11 +37,12 @@ export const OfferCard = (props:{pcInstance : any}) => {
 
   const pcInstance = props.pcInstance ?? mockPcInstance
   const [processing, setProcessing] = useState(false);
+  const [lprocessing, setLProcessing] = useState(false);
 
   const {
     components: { PCLoan, CommandedBy },
     network: { playerEntity },
-    systemCalls: { applyOffer, addressToBytes32 },
+    systemCalls: { applyOffer, liquidateOffer, addressToBytes32 },
   } = useMUD();
 
   const pcLoan = getComponentValue(PCLoan, pcInstance.id);
@@ -51,9 +52,16 @@ export const OfferCard = (props:{pcInstance : any}) => {
 
   const handleApply = () => {
     setProcessing(true);
-    applyOffer(pcInstance.id, 1000).then(res=>{
+    applyOffer(pcInstance.id, 100).then(res=>{
       setProcessing(false);
     });   //rent for 1000 blocks
+  }
+
+  const handleLiquidateOffer = () => {
+    setLProcessing(true);
+    liquidateOffer(pcInstance.id).then(res=>{
+      setLProcessing(false);
+    }).catch(err=>setLProcessing(false));   //rent for 1000 blocks
   }
   
   return (
@@ -92,7 +100,7 @@ export const OfferCard = (props:{pcInstance : any}) => {
               {pcInstance.atk}
             </div>
           </div>
-          <div className="flex mx-2 text-cyan-600">
+          <div className="flex ml-4 mr-2 text-cyan-600">
             <div className="font-bold">
                 SPD:
             </div>
@@ -122,7 +130,18 @@ export const OfferCard = (props:{pcInstance : any}) => {
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>)}
           {!!pcLoan? "Busy": processing ? "Processing..." : "Apply"}</button>
-        {pcLoan?.debtorID == addressToBytes32(playerEntity) && (<button className="ml-2 px-2 pb-1 my-auto bg-orange-500 hover:bg-orange-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold"> Finish </button> )}
+        {pcLoan && pcLoan?.debtorID == addressToBytes32(playerEntity) && 
+        (<button 
+        className="ml-2 px-2 pb-1 flex flex-row my-auto bg-orange-500 hover:bg-orange-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold"
+        onClick={handleLiquidateOffer}
+        > 
+         {lprocessing && (<svg class="animate-spin w-4 mt-1 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>)}
+        {lprocessing ? "Processing..." : "Finish"} 
+        </button> 
+        )}
       </div>
     </div>
   </div>
