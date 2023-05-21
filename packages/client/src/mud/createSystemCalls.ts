@@ -5,7 +5,7 @@ import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 import { max_width, max_height, map_height, map_width, parcel_width, parcel_height, TerrainType } from "../constant";
 
-import { utils } from "ethers";
+import { ethers, utils } from "ethers";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -13,6 +13,16 @@ export function createSystemCalls(
   { singletonEntity, playerEntity, worldSend, txReduced$ }: SetupNetworkResult,
   { PlayerPosition, Player, MapConfig, ParcelTerrain, Obstruction }: ClientComponents
 ) {
+
+  const addressToBytes32 = (address: string) => {
+    return ethers.utils.hexZeroPad(ethers.utils.hexlify(address), 32);
+  }
+
+  const bytes32ToInteger = (bytes32: string): string => {
+    const bigNumber = ethers.BigNumber.from(bytes32);
+    const paddedNumberString = ethers.utils.hexZeroPad(bigNumber.toHexString(), 1);
+    return paddedNumberString
+  }
 
   // comply with LibMap.distance
   const wrapPosition = (x: number, y: number) => {
@@ -152,6 +162,15 @@ export function createSystemCalls(
     }
   }
 
+  const attack = async(attacker_pcID: string, target_pcID: string, attackID: string) => {
+    try {
+      const tx = await worldSend("netherscape_BattleSystem_attack", [attacker_pcID, target_pcID, attackID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("attack successfully");
+    }
+  }
+
 
   const applyOffer = async (entityId: string, duration: number) => {
     try {
@@ -170,6 +189,9 @@ export function createSystemCalls(
     siege,
     unsiege,
     logout,
+    attack,
+    addressToBytes32,
+    bytes32ToInteger,
     applyOffer
   };
 }

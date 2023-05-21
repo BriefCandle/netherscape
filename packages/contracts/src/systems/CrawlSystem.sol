@@ -8,6 +8,8 @@ import { LibUtils } from "../libraries/LibUtils.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibSiege } from "../libraries/LibSiege.sol";
 import { LibBattle } from "../libraries/LibBattle.sol";
+import { LibCommand } from "../libraries/LibCommand.sol";
+
 
 import { PCSystem } from "./PCSystem.sol";
 
@@ -16,6 +18,8 @@ contract CrawlSystem is System {
 
   function crawl(uint16 x, uint16 y) public {
     bytes32 player = LibUtils.addressToEntityKey(address(_msgSender()));
+
+    require(LibCommand.getPCsByPlayer(player).length != 0, "Crawl: player has no PC");
 
     require(!LibBattle.isPlayerInBattle(player), "Crawl: player in battle");
 
@@ -56,6 +60,10 @@ contract CrawlSystem is System {
 
     // TODO?: add pcClassID as input; then need to change front-end
     bytes32 pcClassID = LibUtils.numberToEntityKey(0);
+    IWorld(_world()).netherscape_PCSystem_spawnPC(pcClassID, player);
+
+    // spawn another to compare in battle
+    pcClassID = LibUtils.numberToEntityKey(2);
     IWorld(_world()).netherscape_PCSystem_spawnPC(pcClassID, player);
   }
 
