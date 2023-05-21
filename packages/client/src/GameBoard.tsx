@@ -37,7 +37,7 @@ export const GameBoard = () => {
         <div className="game h-full w-full"> <RenderMap /></div>
 
       </div>
-      <OfferList />
+      <div className="relative"><OfferList /></div>
     </div>
 
   )
