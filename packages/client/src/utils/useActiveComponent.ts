@@ -24,8 +24,8 @@ export enum ActiveComponent {
   "teamPokemon",
   "pokemonClass",
   "battle",
-  "battlePlayerAction",
-  "battlePlayerTarget",
+  "battlePlayerPCSelected",
+  "battlePlayerAttackSelected",
   "battlePlayerReveal"
 }
 
