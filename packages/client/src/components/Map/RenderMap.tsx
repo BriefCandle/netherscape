@@ -2,6 +2,14 @@ import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { Entity, Has, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { ethers } from 'ethers';
 import { useMUD } from "../../MUDContext";
+
+import ethan_up from "../../assets/player/ethan_up.png";
+import ethan_down from "../../assets/player/ethan_down.png";
+import ethan_left from "../../assets/player/ethan_left.png";
+import ethan_right from "../../assets/player/ethan_right.png";
+
+
+
 import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_width, map_height, max_width, max_height, Coord, terrain_width, terrain_height } from "../../constant";
 
 import { RenderParcel } from "./RenderParcel";
@@ -35,6 +43,7 @@ export const RenderMap = () => {
       };
   });
 
+  console.log('---- other players ----')
   console.log(otherPlayers)
 
   
@@ -107,6 +116,7 @@ export const RenderMap = () => {
 
   const {activeComponent, setActive, interactCoord, setInteractCoord} = useMapContext();
   const [playerDirection, setPlayerDirection] = useState<PlayerDirection>(PlayerDirection.Up);
+  const [playerImage,setPlayerImage] = useState(ethan_up);
 
   useEffect(() => {
     setActive(ActiveComponent.map);
@@ -115,18 +125,22 @@ export const RenderMap = () => {
     // ------ key inputs ------
     const press_up = () => {
       setPlayerDirection(PlayerDirection.Up);
+      setPlayerImage(ethan_up);
       crawlBy(0, -1);}
   
     const press_down = () => {
       setPlayerDirection(PlayerDirection.Down);
+      setPlayerImage(ethan_down);
       crawlBy(0, 1);}
   
     const press_left = () => {
       setPlayerDirection(PlayerDirection.Left);
+      setPlayerImage(ethan_left);
       crawlBy(-1, 0);}
   
     const press_right = () => {
       setPlayerDirection(PlayerDirection.Right);
+      setPlayerImage(ethan_right);
       crawlBy(1, 0);}
     
     const press_a = useCallback(() => {
@@ -156,14 +170,14 @@ export const RenderMap = () => {
                 <div key={columnIndex} 
                 className="relative flex flex-row">
                   {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
-                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} />
+                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} playerImage={playerImage} />
                     : null}
 
                   {
                     otherPlayers.map((otherPlayer) => {
                       const {parcel_x, parcel_y, parcel2map_x, parcel2map_y} = coordMapToParcel(otherPlayer.position.x, otherPlayer.position.y);
                       if(parcel2map_x == terrainInfo.coord.x && parcel2map_y == terrainInfo.coord.y)
-                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} />)
+                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} playerImage={ethan_down}/>)
                       return null;
                     })
                   }
