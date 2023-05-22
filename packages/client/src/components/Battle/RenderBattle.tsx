@@ -62,7 +62,7 @@ export const RenderBattle = () => {
       return setActive(ActiveComponent.battle);
     }
 
-  }, [activeComponent]);
+  }, [activeComponent, playerPCIndex, attackIDIndex]);
 
   const press_b = () => { 
     if (activeComponent == ActiveComponent.battlePlayerPCSelected) {
@@ -71,18 +71,19 @@ export const RenderBattle = () => {
       return setActive(ActiveComponent.battlePlayerPCSelected)
     } 
   }
-  const press_up = () => { 
+  const press_up = useCallback(() => { 
     if (activeComponent == ActiveComponent.battlePlayerPCSelected) {
       setAttackIDIndex((attackIDIndex)=> 
       attackIDIndex === 0 ? attackIDIndex : attackIDIndex - 1)
     }
-  };
-  const press_down = () => { 
+  }, [activeComponent])
+
+  const press_down = useCallback(() => { 
     if (activeComponent == ActiveComponent.battlePlayerPCSelected) {
       setAttackIDIndex((attackIDIndex)=> 
       attackIDIndex === pcAttackIDs.length -1 ? attackIDIndex : attackIDIndex+1)
     }
-   };
+  }, [activeComponent])
 
   // TODO?: bring up the market info
   const press_start = () => { return; };
