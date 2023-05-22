@@ -20,7 +20,8 @@ import { useState, useEffect, useCallback } from "react";
 import { ActiveComponent } from "../../utils/useActiveComponent";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { MapMenu } from "../MapMenu/MapMenu";
-import { Team } from "../MapMenu/Team";
+
+import { TeamList } from "../Team/TeamList";
 import { PCLoanMarket } from "../PCLoan/PCLoanMarket";
 import { PCLoanInject } from "../PCLoan/PCLoanInject";
 
@@ -173,8 +174,7 @@ export const RenderMap = () => {
           {activeComponent == ActiveComponent.mapMenu ? 
             <MapMenu/> : null}
 
-          {activeComponent == ActiveComponent.team ? 
-            <Team/> : null}
+          {activeComponent == ActiveComponent.team ? <TeamList /> : null}
 
           {activeComponent == ActiveComponent.pcLoan ? 
             <PCLoanMarket/> : null}

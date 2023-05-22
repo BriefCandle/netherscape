@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { useMapContext } from "../../utils/MapContext";
 import { useMUD } from "../../MUDContext";
-import { Team } from "./Team";
 
 const menuItems = [
   { name: "$Siege", value: "siege"},
@@ -35,7 +34,7 @@ export const MapMenu = () => {
     )
   }
 
-  const press_a = useCallback(async () => {
+   const press_a = useCallback(async () => {
       const item = menuItems[selectedItemIndex];
       switch (item.value) {
         case "siege":
@@ -82,7 +81,6 @@ export const MapMenu = () => {
             {item.name}
           </div>
         ))}
-
       </div>
       <style>
       {`
