@@ -15,10 +15,10 @@ contract ParcelTemplateRightDown is ParcelTemplate {
 
     map = [
       [G, G, G, G, T],
-      [G, F, G, F, T],
-      [G, F, G, F, T],
-      [G, F, G, F, T],
-      [T, T, T, T, T]
+      [W, W, G, F, T],
+      [W, W, G, F, T],
+      [F, F, G, T, T],
+      [W, T, T, W, W]
     ];
 
     bytes memory terrainMap = convertTerrainArrayToBytes();

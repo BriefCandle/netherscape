@@ -14,11 +14,11 @@ contract ParcelTemplateLeft is ParcelTemplate {
     parcelType = ParcelType.LEFT;
 
     map = [
-      [T, G, G, G, G],
-      [T, G, F, F, F],
-      [T, G, G, F, G],
-      [T, G, G, F, G],
-      [T, G, G, G, G]
+      [W, W, G, G, G],
+      [W, W, G, G, G],
+      [W, W, G, T, G],
+      [W, G, G, T, T],
+      [W, G, G, T, T]
     ];
 
     bytes memory terrainMap = convertTerrainArrayToBytes();

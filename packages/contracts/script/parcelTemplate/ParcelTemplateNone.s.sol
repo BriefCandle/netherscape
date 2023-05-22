@@ -14,11 +14,11 @@ contract ParcelTemplateNone is ParcelTemplate {
     parcelType = ParcelType.NONE;
 
     map = [
-      [G, G, G, G, G],
-      [G, F, G, F, G],
-      [G, F, G, F, G],
-      [G, F, G, F, G],
-      [G, G, G, G, G]
+      [T, G, G, W, W],
+      [G, F, W, W, W],
+      [G, G, R, R, G],
+      [R, R, R, F, T],
+      [T, T, T, G, G]
     ];
 
     bytes memory terrainMap = convertTerrainArrayToBytes();
