@@ -22,6 +22,7 @@ import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { MapMenu } from "../MapMenu/MapMenu";
 import { TeamList } from "../Team/TeamList";
 
+
 export const RenderMap = () => {
 
   const {
@@ -125,6 +126,7 @@ export const RenderMap = () => {
   
     // ------ key inputs ------
     const press_up = () => {
+      console.log("test")
       setPlayerDirection(PlayerDirection.Up);
       setPlayerImage(ethan_up);
       crawlBy(0, -1);}
@@ -155,16 +157,20 @@ export const RenderMap = () => {
   
     
     const press_b = () => {return;}
-    const press_start = () => setActive(ActiveComponent.mapMenu);
+    const press_start = () => {
+      console.log("test")
+      setActive(ActiveComponent.mapMenu)
+    };
   
     useKeyboardMovement(activeComponent == ActiveComponent.map, 
       press_up, press_down, press_left, press_right, press_a, press_b, press_start)
     
 
 
+      
   return (  
         <div className="w-full relative flex flex-col">
-              {activeComponent == ActiveComponent.mapMenu ? <MapMenu /> : null}
+              {activeComponent == ActiveComponent.mapMenu ? <MapMenu/> : null}
               {activeComponent == ActiveComponent.team ? <TeamList /> : null}
           {map_screen_terrainMaps.map((row, rowIndex) => (
             <div key={rowIndex} className="relative flex flex-row">

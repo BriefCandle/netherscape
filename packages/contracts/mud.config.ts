@@ -3,8 +3,10 @@ import { mudConfig, resolveTableId } from "@latticexyz/world/register";
 export default mudConfig({
   namespace: "netherscape",
   enums: {
-    ParcelType: ["CUSTOMIZED", "NONE", "LEFT", "UP", "RIGHT", "DOWN", "LEFTUP", "RIGHTUP", "RIGHTDOWN", "LEFTDOWN"],
-    TerrainType: ["NONE", "TREE", "GRASS", "FLOWER", "CONSOLE"],
+    // ParcelType: ["CUSTOMIZED", "NONE", "LEFT", "UP", "RIGHT", "DOWN", "LEFTUP", "RIGHTUP", "RIGHTDOWN", "LEFTDOWN"],
+    ParcelType: ["CUSTOMIZED", "NONE", "LEFT", "UP", "RIGHT", "DOWN", "LEFTUP", "RIGHTUP", "RIGHTDOWN", "LEFTDOWN",
+                              "NONE1", "LEFT1", "UP1", "RIGHT1", "DOWN1", "LEFTUP1", "RIGHTUP1", "RIGHTDOWN1", "LEFTDOWN1"],
+    TerrainType: ["NONE", "TREE", "GRASS", "FLOWER", "WATER", "GRAVEL", "CONSOLE"],
     AttackType: ["NORMAL", "PARALYSIS"],
   },
   systems: {

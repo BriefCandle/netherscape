@@ -12,7 +12,16 @@ enum ParcelType {
   LEFTUP,
   RIGHTUP,
   RIGHTDOWN,
-  LEFTDOWN
+  LEFTDOWN,
+  NONE1,
+  LEFT1,
+  UP1,
+  RIGHT1,
+  DOWN1,
+  LEFTUP1,
+  RIGHTUP1,
+  RIGHTDOWN1,
+  LEFTDOWN1
 }
 
 enum TerrainType {
@@ -20,6 +29,8 @@ enum TerrainType {
   TREE,
   GRASS,
   FLOWER,
+  WATER,
+  GRAVEL,
   CONSOLE
 }
 
