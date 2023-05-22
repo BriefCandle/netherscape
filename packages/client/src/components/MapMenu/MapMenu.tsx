@@ -43,7 +43,7 @@ export const MapMenu = () => {
           return setActive(ActiveComponent.map);        
         case "team":
           // setThatPlayerIndex(playerEntity);
-          //  setActive(ActiveComponent.team);
+           setActive(ActiveComponent.team);
           return console.log("team")
         case "item":
           return console.log("Item");

@@ -20,6 +20,8 @@ import { useState, useEffect, useCallback } from "react";
 import { ActiveComponent } from "../../utils/useActiveComponent";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { MapMenu } from "../MapMenu/MapMenu";
+import { TeamList } from "../Team/TeamList";
+
 
 export const RenderMap = () => {
 
@@ -169,6 +171,7 @@ export const RenderMap = () => {
   return (  
         <div className="w-full relative flex flex-col">
               {activeComponent == ActiveComponent.mapMenu ? <MapMenu/> : null}
+              {activeComponent == ActiveComponent.team ? <TeamList /> : null}
           {map_screen_terrainMaps.map((row, rowIndex) => (
             <div key={rowIndex} className="relative flex flex-row">
               {row.map((terrainInfo, columnIndex) => (

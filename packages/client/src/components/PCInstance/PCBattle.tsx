@@ -9,9 +9,9 @@ import { spdAdjust } from "../../constant";
 export const HPBar = (props : {hp : number | undefined, maxHP: number | undefined}) => {
 
   return (
-    <div className="relative mt-2">
-      <span className="absolute w-full text-black text-xs font-bold justify-center text-center">{props.hp}/{props.maxHP}</span>
-      <div className="h-4 w-full overflow-hidden flex rounded-xl bg-gray-200 meter">
+    <div className="relative">
+      <span className="absolute w-full text-black text-xs font-bold justify-center text-center text-white">{props.hp}/{props.maxHP}</span>
+      <div className="h-4 w-full overflow-hidden flex rounded-xl bg-gray-300 meter">
         <span
           style={{ width: `${props.hp / props.maxHP * 100}%` }}
           className={`shadow-none flex flex-col text-center whitespace-nowrap text-black justify-center bg-red-400`}
@@ -36,14 +36,14 @@ export const PCAttack = (props: {attackID: string, selected: boolean}) => {
   const attackType = getComponentValueStrict(AttackClass, attackKey as Entity).attackType
 
   return (
-    <>
-    <div className={`${selected? "selected" : ""}`}>
+    <div className="mx-1 my-1">
+    <div className={`${selected? "bg-gray-400" : ""} transition-all duration-200 ease-in-out`}>
     <div className="flex flex-row">
     <div className="flex">
       <div className="font-bold">
           {className} | 
       </div>
-      <div className="font-bold">
+      <div className="font-bold mx-1">
           Power:
       </div>
       <div className="ml-2 font-bold text-gray-500 text-right cursor-pointer ">
@@ -52,7 +52,7 @@ export const PCAttack = (props: {attackID: string, selected: boolean}) => {
     </div>
     <div className="flex mx-2">
       <div className="font-bold">
-          crit: 
+          Crit: 
       </div>
       <div className="ml-2 font-bold text-gray-500 text-right cursor-pointer ">
         {crit}
@@ -68,23 +68,8 @@ export const PCAttack = (props: {attackID: string, selected: boolean}) => {
     </div>
     </div>
     </div>
-    <style>
-      {`
-      // .pc-battle {
-      //   display: flex;
-      //   align-items: center;
-      //   flex-direction: column;
-      //   margin: 5px;
-      //   color: black;
-      //   font-size: 12px;
-      // }
-      .selected {
-        color: #ffd700;
-        background-color: #585858;
-      }
-      `}
-    </style>
-    </>
+
+    </div>
   )
 }
 
@@ -113,37 +98,33 @@ export const PCBattle = (props: {pcID: string, selected: boolean, imageType: PCI
   const currentPP = pp_accum >= maxPP ? maxPP : pp_accum;
 
   return (
-    <>
-    <div className={`pc-battle ${selected? "selected" : ""}`}>
-      <div className="pc-pic">
+    <div className="my-auto w-32 ">
+    <div className={`flex flex-col rounded-md transition ease-in-out duration-300 ${selected? "bg-gray-400" : ""} `}>
+      <div className="mx-auto my-1">
         <LoadPCImage classIndex={pcClassName} imageType={imageType}/>
       </div>
-      <HPBar hp={hp} maxHP={maxHP} />
-      <PPLeft currentPP={currentPP} maxPP={maxPP} />
+      <div className="my-1 mx-auto w-24 shrink">
+        <HPBar hp={hp} maxHP={maxHP} />
+      </div>
+      <div className="my-2 mx-auto flex">
+        <PPLeft currentPP={currentPP} maxPP={maxPP} />
+      </div>
     </div>
-    <style>
-      {`
-      .pc-battle {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        margin: 5px;
-        color: black;
-        font-size: 12px;
-      }
-      .selected {
-        color: #ffd700;
-        background-color: #585858;
-      }
-      `}
-    </style>
-    </>
+
+    </div>
   )
 }
 
-const cx = 30;
-const cy = 30;
-const r = 15;
+
+
+
+
+
+
+
+const cx = 0;
+const cy = 0;
+const r = 20;
 
 export const PPLeft = (props: {currentPP: number, maxPP: number}) => {
   const {currentPP, maxPP} = props;
@@ -153,13 +134,26 @@ export const PPLeft = (props: {currentPP: number, maxPP: number}) => {
   const progress = currentPP / maxPP;
   const filledPerimeter = perimeter * progress;
 
+  const offset = parseInt(2*Math.PI*50*(1-6/100));
+  console.log(offset)
+
 
   return (
-    <svg width="100" height="100" >
-      <circle cx={cx} cy={cy} r={r} stroke="#ccc" strokeWidth="2" fill="none" />
-      <circle cx={cx} cy={cy} r={r} stroke="green" strokeWidth="3" strokeDasharray={`${filledPerimeter} ${perimeter}`} transform={`rotate(-90 ${cx} ${cy})`} fill="none" />
-      <text x={cx} y={cy} textAnchor="middle" alignmentBaseline="middle" fontSize="10">{Math.round(currentPP)}</text>
-    </svg>
+    <svg className="w-12 h-12" >
+
+        <circle 
+          cx="24" 
+          cy="24"
+          r="20" 
+          fill="transparent"
+          stroke="currentColor" 
+          strokeWidth="6"  
+          strokeLinecap="round"
+          strokeDasharray={`${filledPerimeter} ${perimeter}`}
+          className="text-sky-400"
+        ></circle>
+        <text x={24} y={24} textAnchor="middle" fill="#0284c7" alignmentBaseline="middle" className="text-md font-bold">{Math.round(currentPP)}</text>
+      </svg>
   );
 }
 
