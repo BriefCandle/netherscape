@@ -187,6 +187,45 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    PCLoanOffer: (() => {
+      const tableId = new TableId("netherscape", "PCLoanOffer");
+      return defineComponent(
+        world,
+        {
+          offerorID: RecsType.String,
+          offereeID: RecsType.String,
+          duration: RecsType.BigInt,
+          interestRate: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    PCLoanAccept: (() => {
+      const tableId = new TableId("netherscape", "PCLoanAccept");
+      return defineComponent(
+        world,
+        {
+          offerorID: RecsType.String,
+          acceptorID: RecsType.String,
+          startBlock: RecsType.BigInt,
+          duration: RecsType.BigInt,
+          collateral: RecsType.BigInt,
+          distance: RecsType.Number,
+          isInjected: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
     OfferEnabled: (() => {
       const tableId = new TableId("netherscape", "OfferEnabled");
       return defineComponent(

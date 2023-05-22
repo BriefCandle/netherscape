@@ -32,6 +32,7 @@ export default mudConfig({
         y: "uint16"
       }
     },
+
     // ----- PC, attacks, class and instance -----
     PCClass: {
       schema: {
@@ -64,15 +65,37 @@ export default mudConfig({
         className: "string",
       }
     },
+
     // ----- commandedBy -----
     CommandedBy: "bytes32",
+
     // ----- battle related -----
     BattleWith: "bytes32", // attacker -> defender
     SiegedBy: "bytes32",    // parcelHashID -> player
 
+    // ----- BK: reinforcement / loan  -----
+    PCLoanOffer: {              // pcID -> PCOfferData
+      schema: {
+        offerorID: "bytes32",
+        offereeID: "bytes32", // could be zero
+        duration: "uint256", 
+        interestRate: "uint32"
+      }
+    },
+    PCLoanAccept: {             // i.e., PCLoanContract
+      schema: {
+        offerorID: "bytes32",
+        acceptorID: "bytes32", 
+        startBlock: "uint256",
+        duration: "uint256",
+        collateral: "uint256",
+        distance: "uint16",
+        isInjected: "bool",
+      }
+    },
 
-    // ----- reinforcement  -----
-    OfferEnabled: "bool",
+    // ----- reinforcement /loan  -----
+    OfferEnabled: "bool",        
     PCLoan: {
       schema: {
         debtorID: "bytes32",       // player ID

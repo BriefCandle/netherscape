@@ -14,5 +14,7 @@ import { AttackClass, AttackClassData, AttackClassTableId } from "./tables/Attac
 import { CommandedBy, CommandedByTableId } from "./tables/CommandedBy.sol";
 import { BattleWith, BattleWithTableId } from "./tables/BattleWith.sol";
 import { SiegedBy, SiegedByTableId } from "./tables/SiegedBy.sol";
+import { PCLoanOffer, PCLoanOfferData, PCLoanOfferTableId } from "./tables/PCLoanOffer.sol";
+import { PCLoanAccept, PCLoanAcceptData, PCLoanAcceptTableId } from "./tables/PCLoanAccept.sol";
 import { OfferEnabled, OfferEnabledTableId } from "./tables/OfferEnabled.sol";
 import { PCLoan, PCLoanData, PCLoanTableId } from "./tables/PCLoan.sol";

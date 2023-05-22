@@ -36,7 +36,6 @@ export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPos
 
   return (
   <>
-    { activeComponent == ActiveComponent.mapMenu ? <MapMenu /> : null}
     <div 
       className="flex flex-row flex-wrap justify-center items-center z-10 absolute"
       style={{

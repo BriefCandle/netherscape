@@ -51,6 +51,9 @@ library LibPCInstance {
     return blocks;
   }
 
+  function isPCFainted(bytes32 pcID) internal view returns (bool) {
+    return PCInstance.getCurrentHP(pcID) == 0;
+  }
 
   function isValueInArray(bytes32 value, bytes32[2] memory array) internal pure returns (bool) {
     for (uint256 i = 0; i < array.length; i++) {
