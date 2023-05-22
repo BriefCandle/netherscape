@@ -7,6 +7,7 @@ import { IWorld } from "../../src/codegen/world/IWorld.sol";
 import { LibUtils } from "../libraries/LibUtils.sol";
 import { LibMap } from "../libraries/LibMap.sol";
 import { LibSiege } from "../libraries/LibSiege.sol";
+import { LibBattle }from "../libraries/LibBattle.sol";
 
 import { getKeysWithValue } from "@latticexyz/world/src/modules/keyswithvalue/getKeysWithValue.sol";
 
@@ -18,7 +19,11 @@ contract SiegeSystem is System {
 
     require(!LibSiege.isPlayerSiege(player), "Siege: player has already siege");
 
+    require(!LibBattle.isPlayerInBattle(player), "Siege: player is in battle");
+
     bytes32 parcelID = LibMap.getPlayerParcelID(player);
+
+    require(!LibSiege.isParcelSieged(parcelID), "Siege: parcel is sieged");
 
     // TODO: add other requires
     

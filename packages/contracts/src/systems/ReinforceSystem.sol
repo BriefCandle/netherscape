@@ -11,7 +11,6 @@ import { LibUtils } from "../libraries/LibUtils.sol";
 import { LibBattle } from "../libraries/LibBattle.sol";
 import { LibLoan } from "../libraries/LibLoan.sol";
 
-// this is a system dedicating for player managing his position on map
 contract ReinforceSystem is System {
 
     //temporary const, will be removed
@@ -25,7 +24,6 @@ contract ReinforceSystem is System {
         
         OfferEnabled.set(pcInstanceID, true);
     }
-
 
     function offer(bytes32 pcInstanceID) public {
         require(!OfferEnabled.get(pcInstanceID), "already enabled");
@@ -72,6 +70,7 @@ contract ReinforceSystem is System {
     
 
     // is this necessary ?
+    // BK: yes, because offeree needs to call inject to obtain pc's commanding rights
     function inject(bytes32 pcInstanceID) public {
         require(LibLoan.canInjected(pcInstanceID), "not yet reached");
     }

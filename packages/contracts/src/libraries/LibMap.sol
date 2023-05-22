@@ -108,7 +108,7 @@ library LibMap {
     ( , , parcel2map_x, parcel2map_y) = coordMapToParcel(map_x, map_y);
   }
 
-  // player -> parcelID
+  // player -> parcel2map coord -> parcelID
   function getPlayerParcelID(bytes32 player) internal view returns (bytes32 parcelID) {
     (uint16 parcel2map_x, uint16 parcel2map_y) = getPlayerParcelCoord(player);
     parcelID = hashParcelID(parcel2map_x, parcel2map_y);

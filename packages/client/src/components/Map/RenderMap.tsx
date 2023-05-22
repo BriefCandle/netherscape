@@ -61,6 +61,7 @@ export const RenderMap = () => {
 
   // --------- get map's original parcel matrix ---------
   const parcelTypes = MapConfig.values.parcelTypes.values();
+  console.log("MapConfig", MapConfig)
 
   const convertMapIteratorToArray = (mapIterator: IterableIterator<number[]>) => {
     const matrix = [];

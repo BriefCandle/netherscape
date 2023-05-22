@@ -9,6 +9,7 @@ import { IBattleInitSystem } from "./IBattleInitSystem.sol";
 import { IBattleSystem } from "./IBattleSystem.sol";
 import { ICrawlSystem } from "./ICrawlSystem.sol";
 import { IMapSystem } from "./IMapSystem.sol";
+import { IPCLoanSystem } from "./IPCLoanSystem.sol";
 import { IPCSystem } from "./IPCSystem.sol";
 import { IReinforceSystem } from "./IReinforceSystem.sol";
 import { ISiegeSystem } from "./ISiegeSystem.sol";
@@ -23,6 +24,7 @@ interface IWorld is
   IBattleSystem,
   ICrawlSystem,
   IMapSystem,
+  IPCLoanSystem,
   IPCSystem,
   IReinforceSystem,
   ISiegeSystem
