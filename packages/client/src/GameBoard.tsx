@@ -20,8 +20,6 @@ export const GameBoard = () => {
   const canSpawn = useComponentValue(Player, playerEntity)?.value !== true;
   const isAttacker = useComponentValue(BattleWith, playerEntity)?.value !== undefined;
   const isDefender = useEntityQuery([HasValue(BattleWith, {value: addressToBytes32(playerEntity as string)})]).length !== 0
-  console.log("isAttacker", isAttacker)
-  console.log("isDefender", isDefender)
 
 
   return (

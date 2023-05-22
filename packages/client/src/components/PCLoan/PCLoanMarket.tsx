@@ -1,22 +1,28 @@
-import { ActiveComponent } from "../../utils/useActiveComponent";
-import { useCallback, useEffect, useState } from "react";
-import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
-import { useMapContext } from "../../utils/MapContext";
+import { useState, useCallback } from "react";
 import { useMUD } from "../../MUDContext";
+import { useMapContext } from "../../utils/MapContext";
+import { ActiveComponent } from "../../utils/useActiveComponent";
+import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
+import { Entity, Has, HasValue, getComponentValue, runQuery } from "@latticexyz/recs";
+import { useEntityQuery } from "@latticexyz/react";
 
-const menuItems = [
-  { name: "$Siege", value: "siege"},
-  { name: "$Unsiege", value: "unsiege"}, // TODO: fix, check for siege condition and grey out
-  { name: "PC Loan Market", value: "pcLoan"},
-  { name: "PC Loan Inject", value: "pcLoanInject"},
-  { name: "Team", value: "team"},
-  { name: "Item", value: "item"},
-  { name: "Logout", value: "logout"}
-]
+export const PCLoanMarket = () => {
 
-export const MapMenu = () => {
+  const { 
+    components: { PCLoanOffer, PCInstance, PCLoanAccept },
+    network: { playerEntity },
+    systemCalls: {addressToBytes32, pcLoan_accept }
+  } = useMUD();
 
-  const { systemCalls: {siege, unsiege, logout}} = useMUD();
+  const pcIDs = useEntityQuery([Has(PCLoanOffer)])
+  
+  const pcInstances = pcIDs?.map((pcID) => {
+    return getComponentValue(PCInstance, pcID)
+  })
+
+  const test_pcIDs = runQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity)})])
+  console.log(test_pcIDs)
+  
 
   const { setActive, activeComponent } = useMapContext()
 
@@ -30,33 +36,15 @@ export const MapMenu = () => {
 
   const press_down = () => {
     setSelectedItemIndex((selectedItemIndex)=> 
-      selectedItemIndex === menuItems.length - 1 ? selectedItemIndex : selectedItemIndex + 1
+      selectedItemIndex === pcInstances.length - 1 ? selectedItemIndex : selectedItemIndex + 1
     )
   }
 
-   const press_a = useCallback(async () => {
-      const item = menuItems[selectedItemIndex];
-      switch (item.value) {
-        case "siege":
-          siege();
-          return setActive(ActiveComponent.map);
-        case "unsiege":
-          unsiege();
-          return setActive(ActiveComponent.map);        
-        case "team":
-          setActive(ActiveComponent.team);
-          return console.log("team")
-        case "pcLoan":
-          return setActive(ActiveComponent.pcLoan)
-        case "pcLoanInject":
-            return setActive(ActiveComponent.pcLoanInject)
-        case "item":
-          return console.log("Item");
-        case "logout":
-          await logout();
-          return setActive(ActiveComponent.map)
-      }
-    }, [press_up, press_down]);
+  const press_a = useCallback(async () => {
+    const pcID = pcIDs[selectedItemIndex];
+    pcLoan_accept(pcID)
+      // return setActive(ActiveComponent.map)
+  }, [press_up, press_down]);
 
     const press_b = () => {
       setActive(ActiveComponent.map);
@@ -66,19 +54,20 @@ export const MapMenu = () => {
     const press_right = () => { return; };
     const press_start = () => { setActive(ActiveComponent.map);};
 
-  useKeyboardMovement(activeComponent == ActiveComponent.mapMenu, 
+  useKeyboardMovement(activeComponent == ActiveComponent.pcLoan, 
     press_up, press_down, press_left, press_right, press_a, press_b, press_start)
 
-  
+
   return (
     <>
-      <div className="menu">
-        {menuItems.map((item, index) => (
+    Press A to accept offer
+          <div className="menu">
+        {pcInstances.map((pcInstance, index) => (
           <div 
-            key={item.value}
+            key={pcInstance?.pcClassID}
             className={`menu-item ${index === selectedItemIndex ? "selected" : ""}`}
           >
-            {item.name}
+            {pcInstance?.pcClassID}
           </div>
         ))}
       </div>
@@ -122,3 +111,4 @@ export const MapMenu = () => {
     </>
   )
 }
+

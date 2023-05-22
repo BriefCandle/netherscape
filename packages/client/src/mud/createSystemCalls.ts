@@ -180,6 +180,55 @@ export function createSystemCalls(
       console.log("attack successfully");
     }
   }
+  
+  const pcLoan_offer = async(pcID: string) => {
+    try {
+      const wrappedBytes32 = ethers.utils.hexZeroPad(0, 32);
+      const offereeID = wrappedBytes32
+      const duration = 100000;
+      const interestRate = 0;
+      const tx = await worldSend("netherscape_PCLoanSystem_offer", [pcID, offereeID, duration, interestRate]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("offer successfully");
+    }
+  }
+
+  const pcLoan_rescind = async(pcID: string) => {
+    try {
+      const tx = await worldSend("netherscape_PCLoanSystem_rescind", [pcID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("rescind successfully");
+    }
+  }
+
+  const pcLoan_accept = async(pcID: string) => {
+    try {
+      const tx = await worldSend("netherscape_PCLoanSystem_accept", [pcID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("accept successfully");
+    }
+  }
+
+  const pcLoan_inject = async(pcID: string) => {
+    try {
+      const tx = await worldSend("netherscape_PCLoanSystem_inject", [pcID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("inject successfully");
+    }
+  }
+
+  const pcLoan_terminate = async(pcID: string) => {
+    try {
+      const tx = await worldSend("netherscape_PCLoanSystem_terminate", [pcID]);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("terminate successfully");
+    }
+  }
 
 
   const applyOffer = async (entityId: string, duration: number) => {
@@ -212,6 +261,11 @@ export function createSystemCalls(
     addressToBytes32,
     bytes32ToInteger,
     applyOffer,
-    liquidateOffer
+    liquidateOffer,
+    pcLoan_offer,
+    pcLoan_rescind,
+    pcLoan_accept,
+    pcLoan_inject,
+    pcLoan_terminate
   };
 }
