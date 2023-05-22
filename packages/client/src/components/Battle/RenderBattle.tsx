@@ -94,46 +94,24 @@ export const RenderBattle = () => {
 
   return (
     <>
-    <div  className="w-full relative flex flex-col" style={{width: 1000, height: 600 }}>
-      <div className="enemy-pcs">
+    <div  className="w-full relative flex flex-col bg-battle" style={{width: 1000, height: 600, }}>
+      <div className="h-1/3 flex flex-row justify-end ">
         { enemy_pcIDs.map((pcID, index) =>(
           <PCBattle key={index} pcID={pcID} selected={index == enemyPCIndex} imageType={PCImageType.front}/>
         ))}
       </div>
-      <div className="player-pcs">
+      <div className="h-1/3 flex flex-row ">
         { player_pcIDs.map((pcID, index) => (
           <PCBattle key={index} pcID={pcID} selected={index == playerPCIndex} imageType={PCImageType.back}/>
         ))}
       </div>
-      <div className="attack">
+      <div className="h-1/3 flex flex-col bg-black rounded-md">
         { activeComponent == ActiveComponent.battlePlayerPCSelected ? 
         pcAttackIDs.map((attackID, index) => (
           <PCAttack key={index} selected={index == attackIDIndex} attackID={attackID}/>
         )) : null}
       </div>
     </div>
-    <style>
-      {`
-        .enemy-pcs {
-          height: 200px;
-          background-color: white;
-          display: flex;
-          justify-content: flex-end;
-        }
-        .player-pcs {
-          height: 200px;
-          background-color: white;
-          display: flex;
-          justify-content: flex-start;
-        }
-        .attack {
-          height: 200px;
-          background-color: black;
-          // display: flex;
-          // justify-content: flex-start;
-        }
-      `}
-    </style>
     </>
   )
 }

@@ -27,6 +27,7 @@ export const TeamList = () => {
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [buttonSelected, setButtonSelected] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const pcInstanceIDs = useEntityQuery([Has(PCInstance), HasValue(CommandedBy, {value:addressToBytes32(playerEntity)})]);
   const pcInstances = pcInstanceIDs.map( (id : string) => {return  {...getComponentValueStrict(PCInstance, id), id:id };});
@@ -35,6 +36,7 @@ export const TeamList = () => {
 
   const press_up = () => {
     setButtonSelected(false);
+    setLoading(false);
     setSelectedItemIndex((selectedItemIndex) =>
       selectedItemIndex === 0 ? selectedItemIndex : selectedItemIndex - 1
     );
@@ -42,6 +44,7 @@ export const TeamList = () => {
 
   const press_down = () => {
     setButtonSelected(false);
+    setLoading(false);
     setSelectedItemIndex((selectedItemIndex) =>
       selectedItemIndex === pcInstances.length - 1
         ? selectedItemIndex
@@ -52,8 +55,8 @@ export const TeamList = () => {
   const press_a = useCallback(async () => {
     const item = pcInstances[selectedItemIndex];
     console.log(item);
-    
-    buttonSelected && handleOffer(pcInstances[selectedItemIndex].id);
+
+    buttonSelected && !loading && handleOffer(pcInstances[selectedItemIndex].id);
   }, [press_up, press_down]);
 
   const press_b = () => {
@@ -67,7 +70,7 @@ export const TeamList = () => {
     setButtonSelected(true);
   };
   const press_start = () => {
-    buttonSelected && handleOffer(pcInstances[selectedItemIndex].id);
+    buttonSelected && !loading && handleOffer(pcInstances[selectedItemIndex].id);
   };
 
   useKeyboardMovement(
@@ -83,17 +86,21 @@ export const TeamList = () => {
 
   
   const handleOffer = (pcID) => {
-    
+    setLoading(true);
     console.log(pcID);
+
+    setTimeout(() => {
+      setLoading(false);
+    },3000)
   }
 
 
   return (
     <>
-      <div className="absolute flex flex-col top-1/4 left-1/3 bg-white border-2  box-shadow-xl z-20 rounded-lg w-96">
+      <div className="absolute flex flex-col top-1/4 left-[30%] bg-white border-2  box-shadow-xl z-20 rounded-lg" style={{width: "27rem"}}>
 
         {pcInstances.map((pc,i)=>(
-          <TeamPCCard pc={pc} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} />
+          <TeamPCCard pc={pc} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} loading={ selectedItemIndex==i && loading} />
         ))}
 
       </div>
