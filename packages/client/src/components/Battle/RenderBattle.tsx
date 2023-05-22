@@ -25,8 +25,8 @@ export const RenderBattle = () => {
   const [attackIDIndex, setAttackIDIndex] = useState(0);
   const [activeComponent, setActive] = useState(ActiveComponent.battle);
 
-  console.log("attack PC", player_pcIDs[playerPCIndex])
-  console.log("attack ID", pcAttackIDs[attackIDIndex])
+  // console.log("attack PC", player_pcIDs[playerPCIndex])
+  // console.log("attack ID", pcAttackIDs[attackIDIndex])
 
   const press_left = useCallback(() => {
     if (activeComponent == ActiveComponent.battle) {
@@ -51,7 +51,7 @@ export const RenderBattle = () => {
   const press_a = useCallback(async () => {
     if (activeComponent == ActiveComponent.battle) {
       const pcID = player_pcIDs[playerPCIndex];
-      console.log("selected pcid: ", pcID) 
+      // console.log("selected pcid: ", pcID) 
       setPCAttackIDs(getComponentValueStrict(PCInstance, pcID as Entity).attackIDs) 
       return setActive(ActiveComponent.battlePlayerPCSelected);
     } else if (activeComponent == ActiveComponent.battlePlayerPCSelected) {

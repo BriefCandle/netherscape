@@ -1,4 +1,4 @@
-import { useComponentValue } from "@latticexyz/react";
+import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { RenderMap } from "./components/Map/RenderMap";
 import { useMUD } from "./MUDContext";
 import { OfferList } from "./components/Reinforce/OfferList";
@@ -19,7 +19,7 @@ export const GameBoard = () => {
 
   const canSpawn = useComponentValue(Player, playerEntity)?.value !== true;
   const isAttacker = useComponentValue(BattleWith, playerEntity)?.value !== undefined;
-  const isDefender = runQuery([HasValue(BattleWith, {value: addressToBytes32(playerEntity as string)})]) .size !== 0
+  const isDefender = useEntityQuery([HasValue(BattleWith, {value: addressToBytes32(playerEntity as string)})]).length !== 0
   console.log("isAttacker", isAttacker)
   console.log("isDefender", isDefender)
 

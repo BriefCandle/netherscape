@@ -40,20 +40,6 @@ export function createSystemCalls(
     return [wrappedX, wrappedY]
   }
 
-  const isAttacker = () => {
-    if (!playerEntity) {
-      return false;
-    }
-    return getComponentValue(BattleWith, playerEntity)?.value !== undefined
-  }
-
-  const isDefender = () => {
-    if (!playerEntity) {
-      return false;
-    }
-    return runQuery([HasValue(BattleWith, {value: playerEntity})]).size > 0;
-  }
-
   // TODO: fix, not reactive when unsieged; useComponentValue instead
   const isSieged = (x: number, y: number) => {
     const encodedData = ethers.utils.defaultAbiCoder.encode(['uint16', 'uint16'], [x, y]);
