@@ -4,6 +4,9 @@ import { useState } from "react";
 export enum ActiveComponent {
   "map",
   "mapMenu",
+  "pcLoan",
+  "pcLoanInject",
+  "team",
   "menu",
   "terrainConsole",
   "nurse",
@@ -18,7 +21,7 @@ export enum ActiveComponent {
   "otherPlayerMenu",
   "offerorWait",
   "offereeMenu",
-  "team",
+  
   "teamSwitch",
   "teamPokemonMenu",
   "teamPokemon",

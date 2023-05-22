@@ -20,6 +20,9 @@ import { useState, useEffect, useCallback } from "react";
 import { ActiveComponent } from "../../utils/useActiveComponent";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { MapMenu } from "../MapMenu/MapMenu";
+import { Team } from "../MapMenu/Team";
+import { PCLoanMarket } from "../PCLoan/PCLoanMarket";
+import { PCLoanInject } from "../PCLoan/PCLoanInject";
 
 export const RenderMap = () => {
 
@@ -156,7 +159,6 @@ export const RenderMap = () => {
     
     const press_b = () => {return;}
     const press_start = () => {
-      console.log("test")
       setActive(ActiveComponent.mapMenu)
     };
   
@@ -168,7 +170,18 @@ export const RenderMap = () => {
       
   return (  
         <div className="w-full relative flex flex-col">
-              {activeComponent == ActiveComponent.mapMenu ? <MapMenu/> : null}
+          {activeComponent == ActiveComponent.mapMenu ? 
+            <MapMenu/> : null}
+
+          {activeComponent == ActiveComponent.team ? 
+            <Team/> : null}
+
+          {activeComponent == ActiveComponent.pcLoan ? 
+            <PCLoanMarket/> : null}
+          
+          {activeComponent == ActiveComponent.pcLoanInject ? 
+            <PCLoanInject/> : null}
+
           {map_screen_terrainMaps.map((row, rowIndex) => (
             <div key={rowIndex} className="relative flex flex-row">
               {row.map((terrainInfo, columnIndex) => (
