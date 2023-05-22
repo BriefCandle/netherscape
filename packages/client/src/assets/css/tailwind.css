@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    @variants responsive {
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+      }
+    }
+}
+@font-face {
+    font-family: Joystix;
+    src: url("../font/joystix.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Joystix;
+    font-weight: bold;
+    src: url("../font/joystix.otf") format("opentype");
+}
+
+.bg-battle{ 
+    background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+}
+
