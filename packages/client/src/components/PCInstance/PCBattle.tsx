@@ -99,7 +99,7 @@ export const PCBattle = (props: {pcID: string, selected: boolean, imageType: PCI
 
   return (
     <div className="my-auto w-32 ">
-    <div className={`flex flex-col rounded-md transition ease-in-out duration-300 ${selected? "bg-gray-400" : ""} `}>
+    <div className={`flex flex-col rounded-md transition ease-in-out duration-300 ${selected? "bg-gray-400 opacity-75" : ""} `}>
       <div className="mx-auto my-1">
         <LoadPCImage classIndex={pcClassName} imageType={imageType}/>
       </div>

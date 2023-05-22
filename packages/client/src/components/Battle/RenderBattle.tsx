@@ -41,7 +41,7 @@ export const RenderBattle = () => {
   const press_right = useCallback(() => {
     if (activeComponent == ActiveComponent.battle) {
       setPlayerPCIndex((playerPCIndex)=> 
-      playerPCIndex === player_pcIDs.length -1 ? playerPCIndex : playerPCIndex+1)
+      playerPCIndex === player_pcIDs.length ? playerPCIndex : playerPCIndex+1)
     } else if (activeComponent == ActiveComponent.battlePlayerAttackSelected) {
       setEnemyPCIndex((enemyPCIndex) =>
       enemyPCIndex === enemy_pcIDs.length - 1 ? enemyPCIndex : enemyPCIndex + 1)
@@ -50,10 +50,17 @@ export const RenderBattle = () => {
 
   const press_a = useCallback(async () => {
     if (activeComponent == ActiveComponent.battle) {
-      const pcID = player_pcIDs[playerPCIndex];
-      // console.log("selected pcid: ", pcID) 
-      setPCAttackIDs(getComponentValueStrict(PCInstance, pcID as Entity).attackIDs) 
-      return setActive(ActiveComponent.battlePlayerPCSelected);
+      if(playerPCIndex == player_pcIDs.length){
+        //reinforce
+        console.log("reinforce");
+        // return setActive(ActiveComponent.battlePlayerPCSelected);
+      }
+      else{
+        const pcID = player_pcIDs[playerPCIndex];
+        // console.log("selected pcid: ", pcID) 
+        setPCAttackIDs(getComponentValueStrict(PCInstance, pcID as Entity).attackIDs) 
+        return setActive(ActiveComponent.battlePlayerPCSelected);
+      }
     } else if (activeComponent == ActiveComponent.battlePlayerPCSelected) {
       return setActive(ActiveComponent.battlePlayerAttackSelected)
     } else if (activeComponent == ActiveComponent.battlePlayerAttackSelected) {
@@ -105,7 +112,11 @@ export const RenderBattle = () => {
         { player_pcIDs.map((pcID, index) => (
           <PCBattle key={index} pcID={pcID} selected={index == playerPCIndex} imageType={PCImageType.back}/>
         ))}
+        <div className={`my-auto flex w-24 h-[10.5rem] rounded-md transition-all ease-in-out ${playerPCIndex == player_pcIDs.length ? "bg-gray-400 opacity-75":""}`}>
+          <svg className={`w-12 h-12 mx-auto my-auto transition-all ease-in-out ${playerPCIndex == player_pcIDs.length ? "invert":""}`} stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"xmlns="http://www.w3.org/2000/svg"><path d="M512 0C229.232 0 0 229.232 0 512c0 282.784 229.232 512 512 512 282.784 0 512-229.216 512-512C1024 229.232 794.784 0 512 0zm0 961.008c-247.024 0-448-201.984-448-449.01 0-247.024 200.976-448 448-448s448 200.977 448 448-200.976 449.01-448 449.01zM736 480H544V288c0-17.664-14.336-32-32-32s-32 14.336-32 32v192H288c-17.664 0-32 14.336-32 32s14.336 32 32 32h192v192c0 17.664 14.336 32 32 32s32-14.336 32-32V544h192c17.664 0 32-14.336 32-32s-14.336-32-32-32z"></path></svg>
+        </div>
       </div>
+
       <div className="h-1/3 flex flex-col bg-black rounded-md">
         { activeComponent == ActiveComponent.battlePlayerPCSelected ? 
         pcAttackIDs.map((attackID, index) => (

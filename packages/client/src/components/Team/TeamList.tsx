@@ -97,7 +97,7 @@ export const TeamList = () => {
 
   return (
     <>
-      <div className="absolute flex flex-col top-1/4 left-[30%] bg-white border-2  box-shadow-xl z-20 rounded-lg" style={{width: "27rem"}}>
+      <div className="absolute flex flex-col top-1/4 left-[30%] bg-white border-2  box-shadow-xl z-40 rounded-lg" style={{width: "27rem"}}>
 
         {pcInstances.map((pc,i)=>(
           <TeamPCCard pc={pc} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} loading={ selectedItemIndex==i && loading} />
