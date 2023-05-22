@@ -19,6 +19,8 @@ contract ParcelTemplate is Script {
   TerrainType T = TerrainType.TREE;
   TerrainType G = TerrainType.GRASS;
   TerrainType F = TerrainType.FLOWER;
+  TerrainType W = TerrainType.WATER;
+  TerrainType R = TerrainType.GRAVEL;
   TerrainType C = TerrainType.CONSOLE;
 
   TerrainType[parcel_height][parcel_width] map;

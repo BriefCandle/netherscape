@@ -5,20 +5,20 @@ import { ParcelTemplate, ParcelType } from "./ParcelTemplate.s.sol";
 
 // forge script script/parcelTemplate/ParcelTemplateNone.s.sol:ParcelTemplateNone --rpc-url http://localhost:8545 --broadcast
 
-contract ParcelTemplateRightUp is ParcelTemplate {
+contract ParcelTemplateLeftDown1 is ParcelTemplate {
 
   function run() external {
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     vm.startBroadcast(deployerPrivateKey);
 
-    parcelType = ParcelType.RIGHTUP;
+    parcelType = ParcelType.LEFTDOWN1;
 
     map = [
-      [T, T, T, T, T],
-      [G, F, G, G, T],
-      [G, G, F, F, T],
-      [W, W, W, F, T],
-      [W, W, W, G, T]
+      [T, R, R, W, W],
+      [T, R, R, W, W],
+      [T, R, R, F, F],
+      [T, R, R, F, F],
+      [T, T, T, T, T]
     ];
 
     bytes memory terrainMap = convertTerrainArrayToBytes();

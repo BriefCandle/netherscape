@@ -41,6 +41,7 @@ contract MapSystem is System {
         TerrainType terrainType = TerrainType(uint8(terrainMap[(j * parcel_width) + i]));
         
         if (terrainType == TerrainType.TREE ||
+            terrainType == TerrainType.WATER ||
             terrainType == TerrainType.CONSOLE) {
           bytes32 coord_key = LibMap.hashCoord(parcelID, i, j);
           Obstruction.set(coord_key, true);

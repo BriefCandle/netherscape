@@ -10,7 +10,16 @@ export enum ParcelType {
   LEFTUP,
   RIGHTUP,
   RIGHTDOWN,
-  LEFTDOWN
+  LEFTDOWN,
+  NONE1,
+  LEFT1,
+  UP1,
+  RIGHT1,
+  DOWN1,
+  LEFTUP1,
+  RIGHTUP1,
+  RIGHTDOWN1,
+  LEFTDOWN1
 }
 
 export enum TerrainType {
@@ -18,6 +27,8 @@ export enum TerrainType {
   TREE,
   GRASS,
   FLOWER,
+  WATER,
+  GRAVEL,
   // buildings
   CONSOLE,
   // only for hackathon
@@ -38,12 +49,12 @@ export const terrainTypes: Record<TerrainType, TerrainConfig> = {
   //   tile01: "path",
   //   tile11: "path"
   // },
-  // [TerrainType.Gravel]: {
-  //   tile00: "gravel",
-  //   tile10: "gravel",
-  //   tile01: "gravel",
-  //   tile11: "gravel"
-  // },
+  [TerrainType.GRAVEL]: {
+    tile00: "gravel",
+    tile10: "gravel",
+    tile01: "gravel",
+    tile11: "gravel"
+  },
   [TerrainType.GRASS]: {
     tile00: "grass",
     tile10: "grass",
@@ -68,12 +79,12 @@ export const terrainTypes: Record<TerrainType, TerrainConfig> = {
     tile01: "tree_short01",
     tile11: "tree_short11"
   },
-  // [TerrainType.Water]: {
-  //   tile00: "water",
-  //   tile10: "water",
-  //   tile01: "water",
-  //   tile11: "water"
-  // },
+  [TerrainType.WATER]: {
+    tile00: "water",
+    tile10: "water",
+    tile01: "water",
+    tile11: "water"
+  },
   // [TerrainType.Nurse]: {
   //   tile00: "",
   //   tile10: "",
