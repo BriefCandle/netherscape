@@ -24,6 +24,7 @@ import { MapMenu } from "../MapMenu/MapMenu";
 import { TeamList } from "../Team/TeamList";
 import { PCLoanMarket } from "../PCLoan/PCLoanMarket";
 import { PCLoanInject } from "../PCLoan/PCLoanInject";
+import { PCLoanTerminate } from "../PCLoan/PCLoanTerminate";
 
 export const RenderMap = () => {
 
@@ -176,11 +177,14 @@ export const RenderMap = () => {
 
           {activeComponent == ActiveComponent.team ? <TeamList /> : null}
 
-          {activeComponent == ActiveComponent.pcLoan ? 
+          {activeComponent == ActiveComponent.pcLoanMarket ? 
             <PCLoanMarket/> : null}
           
           {activeComponent == ActiveComponent.pcLoanInject ? 
             <PCLoanInject/> : null}
+
+          {activeComponent == ActiveComponent.pcLoanTerminate ? 
+            <PCLoanTerminate/> : null}
 
           {map_screen_terrainMaps.map((row, rowIndex) => (
             <div key={rowIndex} className="relative flex flex-row">

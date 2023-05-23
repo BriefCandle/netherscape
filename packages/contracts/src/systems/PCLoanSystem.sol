@@ -13,6 +13,7 @@ import { LibCommand } from "../libraries/LibCommand.sol";
 import { LibBattle } from "../libraries/LibBattle.sol";
 import { LibPCLoan } from "../libraries/LibPCLoan.sol";
 
+// TODO: use composite key 
 // PC loan is a loan of PC's commanding rights
 contract PCLoanSystem is System {
 
@@ -31,7 +32,7 @@ contract PCLoanSystem is System {
   // player gets back pc's commanding rights
   function rescind(bytes32 pcID) public {
     bytes32 player = LibUtils.addressToEntityKey(address(_msgSender()));
-    require(player == PCLoanOffer.getOffereeID(pcID), "Rescind: player not offeror");
+    require(player == PCLoanOffer.getOfferorID(pcID), "Rescind: player not offeror");
 
     // this technically allows player to "reinforce" himself
     require(!LibBattle.isPlayerInBattle(player), "Rescind: player is in a battle");
@@ -96,7 +97,7 @@ contract PCLoanSystem is System {
       inject(pcID);
     }
 
-    require(pcLoanAccept.startBlock + pcLoanAccept.duration > block.number, "Terminate: loan not due yet");
+    require(pcLoanAccept.startBlock + pcLoanAccept.duration <= block.number, "Terminate: loan not due yet");
     // TODO: implement grace period where only acceptor can call to get bonus back
 
     // TODO: calculate amount of collateral and bonus; and send them to different parties
