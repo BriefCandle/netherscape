@@ -35,8 +35,8 @@ export function createSystemCalls(
   }
 
   const wrapParcel2Map = (x: number, y: number) => {
-    const wrappedX = x < 0 ? map_width - 1: (x > map_width - 1 ? 0 : x);
-    const wrappedY = y < 0 ? map_height - 1 : (y > map_height - 1 ? 0: y);
+    const wrappedX = x < 0 ? map_width - 1 : (x > map_width - 1 ? x - map_width : x);
+    const wrappedY = y < 0 ? map_height - 1 : (y > map_height - 1 ? y - map_height : y);
     return [wrappedX, wrappedY]
   }
 
