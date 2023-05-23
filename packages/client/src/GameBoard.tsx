@@ -6,12 +6,18 @@ import { MapProvider } from "./utils/MapContext";
 import { Entity, HasValue, runQuery } from "@latticexyz/recs";
 import { RenderBattle } from "./components/Battle/RenderBattle";
 import { BattleProvider } from "./utils/BattleContext";
+import { ActiveProvider, useActiveContext } from "./utils/ActiveContext";
+import { PCLoanInject } from "./components/PCLoan/PCLoanInject";
+import { PCLoanMarket } from "./components/PCLoan/PCLoanMarket";
+import { PCLoanTerminate } from "./components/PCLoan/PCLoanTerminate";
+import { ActiveComponent } from "./utils/useActiveComponent";
+import { MapMenu } from "./components/MapMenu/MapMenu";
 
 
 export const GameBoard = () => {
 
   const {
-    components: { PlayerPosition, Player, BattleWith },
+    components: { PlayerPosition, Player, BattleWith, PCLoanAccept },
     network: { playerEntity },
     systemCalls: { spawn, addressToBytes32 },
   } = useMUD();
@@ -20,8 +26,10 @@ export const GameBoard = () => {
   const canSpawn = useComponentValue(Player, playerEntity)?.value !== true;
   const isAttacker = useComponentValue(BattleWith, playerEntity)?.value !== undefined;
   const isDefender = useEntityQuery([HasValue(BattleWith, {value: addressToBytes32(playerEntity as string)})]).length !== 0
+  const pcIDsInject = useEntityQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity), isInjected: false})])
 
 
+  const {activeComponent, setActive} = useActiveContext();
   return (
     <div className="flex flex-row  ">
       {/* overflow: "hidden", */}
@@ -40,21 +48,35 @@ export const GameBoard = () => {
         { canSpawn ? <button className="bg-green-500" onClick={spawn}>Spawn</button> : null}
 
         <div className="game h-full w-full"> 
+        
+          {activeComponent == ActiveComponent.pcLoanMarket ? 
+            <PCLoanMarket/> : null}
+          
+          { pcIDsInject.length !== 0 ?
+            <PCLoanInject pcIDs={pcIDsInject}/> : null}
+            
 
-        { isAttacker || isDefender ?
+          {activeComponent == ActiveComponent.pcLoanTerminate ? 
+            <PCLoanTerminate/> : null}
+
+          {activeComponent == ActiveComponent.mapMenu ? 
+            <MapMenu/> : null}
+
+          { isAttacker || isDefender ?
           <BattleProvider >
             <RenderBattle /> 
           </BattleProvider>: null} 
 
-        { !(isAttacker || isDefender) ?
-        <MapProvider>
-          <RenderMap />
-        </MapProvider>: null}
+          { !(isAttacker || isDefender) ?
+          <MapProvider>
+            <RenderMap />
+          </MapProvider>: null}   
+
         
         </div>
 
       </div>
-      <div className="relative"><OfferList /></div>
+      {/* <div className="relative"><OfferList /></div> */}
     </div>
 
   )

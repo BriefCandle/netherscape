@@ -1,6 +1,6 @@
 
 import { terrain_width, terrain_height } from "../../constant";
-import { PlayerDirection, useMapContext } from "../../utils/MapContext";
+import { PlayerDirection } from "../../utils/MapContext";
 import { useCallback, useEffect, useState } from "react";
 import { useMUD } from "../../MUDContext";
 import { ActiveComponent } from "../../utils/useActiveComponent";
@@ -27,7 +27,7 @@ export const getInteractCoord = (coord: {x: number, y: number}, direction: Playe
 
 export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPosition: any,playerImage:any}) => {
   const {parcel_x, parcel_y, playerPosition, playerImage} = props;
-  console.log(parcel_x, parcel_y, playerPosition)
+  // console.log(parcel_x, parcel_y, playerPosition)
   const {x, y} = playerPosition;
 
  

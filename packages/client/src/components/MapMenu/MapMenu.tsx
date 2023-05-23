@@ -3,9 +3,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { useMapContext } from "../../utils/MapContext";
 import { useMUD } from "../../MUDContext";
-import { useEntityQuery } from "@latticexyz/react";
+import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { Entity, HasValue } from "@latticexyz/recs";
 import { PCLoanInject } from "../PCLoan/PCLoanInject";
+import { useActiveContext } from "../../utils/ActiveContext";
 
 const menuItems = [
   { name: "$Siege", value: "siege"},
@@ -21,14 +22,17 @@ const menuItems = [
 export const MapMenu = () => {
 
   const { 
-    components: { PCLoanOffer, PCLoanAccept, SiegedBy},
+    components: { PCLoanOffer, PCLoanAccept, SiegedBy, BattleWith},
     network: { playerEntity },
     systemCalls: {siege, unsiege, logout,addressToBytes32}
   } = useMUD();
 
-  const { setActive, activeComponent } = useMapContext()
+  const { setActive, activeComponent } = useActiveContext()
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
+
+  const isAttacker = useComponentValue(BattleWith, playerEntity)?.value !== undefined;
+  const isDefender = useEntityQuery([HasValue(BattleWith, {value: addressToBytes32(playerEntity as string)})]).length !== 0
 
   const isSieging = useEntityQuery([HasValue(SiegedBy, {value: addressToBytes32(playerEntity as Entity)})]).length !=0;
 
@@ -66,8 +70,7 @@ export const MapMenu = () => {
           unsiege();
           return setActive(ActiveComponent.map);        
         case "team":
-          setActive(ActiveComponent.team);
-          return console.log("team")
+          return setActive(ActiveComponent.team);
         case "pcLoan":
           return setActive(ActiveComponent.pcLoanMarket)
         case "pcLoanInject":
@@ -88,7 +91,10 @@ export const MapMenu = () => {
 
     const press_left = () => { return; };
     const press_right = () => { return; };
-    const press_start = () => { setActive(ActiveComponent.map);};
+    const press_start = () => { 
+      if (isAttacker || isDefender) setActive(ActiveComponent.battle)
+      else setActive(ActiveComponent.map)
+    };
 
   useKeyboardMovement(activeComponent == ActiveComponent.mapMenu, 
     press_up, press_down, press_left, press_right, press_a, press_b, press_start)

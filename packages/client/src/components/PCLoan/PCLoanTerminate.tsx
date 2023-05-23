@@ -9,6 +9,7 @@ import { useBlockNumber } from "../../utils/useBlockNumber";
 import { pcLoanSpeed, pcLoanSpeedAdjust } from "../../constant";
 import { LoadPCImage, PCImageType } from "../PCInstance/LoadPCImage";
 import { HPBar } from "../Team/TeamPCCard";
+import { useActiveContext } from "../../utils/ActiveContext";
 
 export const PCLoanTerminate = () => {
 
@@ -18,7 +19,7 @@ export const PCLoanTerminate = () => {
     systemCalls: {addressToBytes32, pcLoan_terminate }
   } = useMUD();
 
-  const { setActive, activeComponent } = useMapContext()
+  const { setActive, activeComponent } = useActiveContext()
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [buttonSelected, setButtonSelected] = useState(false);
@@ -61,7 +62,7 @@ export const PCLoanTerminate = () => {
   return (
     <>
       <div className="absolute flex flex-col top-1/4 left-[30%] bg-white border-2  box-shadow-xl z-40 rounded-lg" style={{width: "27rem"}}>
-      <div className="name text-lg bg-black">PCs to be terminated:</div>
+      <div className="name text-lg bg-black">PC loan to be terminated:</div>
         {pcIDs.map((pcID,i)=>(
           <PCTerminatePCCard key={i} pcID={pcID} blockNumber={blockNumber} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} loading={ selectedItemIndex==i && loading} />
       ))}
@@ -88,7 +89,7 @@ export const PCTerminatePCCard = (props: {pcID: any, blockNumber: any, selected:
   
   const blocksLeft = Number(pcLoanAccept?.startBlock + pcLoanAccept.duration) - blockNumber;
   const blocksToTerminate = blocksLeft >= 0? blocksLeft : 0;
-  console.log("blocksToTerminate", blocksToTerminate)
+  // console.log("blocksToTerminate", blocksToTerminate)
 
   const handleClick = () => {
     console.log();

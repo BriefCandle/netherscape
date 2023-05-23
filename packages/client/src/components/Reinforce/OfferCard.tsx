@@ -46,7 +46,7 @@ export const OfferCard = (props:{pcInstance : any}) => {
   } = useMUD();
 
   const pcLoan = getComponentValue(PCLoan, pcInstance.id);
-  console.log("pcloan", pcLoan, playerEntity as Entity);
+  // console.log("pcloan", pcLoan, playerEntity as Entity);
   const owner = getComponentValue(CommandedBy, pcInstance.id)?.value.substr(26,64);
 
 

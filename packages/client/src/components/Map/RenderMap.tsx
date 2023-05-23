@@ -13,7 +13,7 @@ import ethan_right from "../../assets/player/ethan_right.png";
 import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_width, map_height, max_width, max_height, Coord, terrain_width, terrain_height } from "../../constant";
 
 import { RenderParcel } from "./RenderParcel";
-import { RenderPlayer, getInteractCoord } from "./RenderPlayer";
+import { RenderPlayer } from "./RenderPlayer";
 
 import { MapProvider, PlayerDirection, useMapContext } from "../../utils/MapContext";
 import { useState, useEffect, useCallback } from "react";
@@ -25,6 +25,7 @@ import { TeamList } from "../Team/TeamList";
 import { PCLoanMarket } from "../PCLoan/PCLoanMarket";
 import { PCLoanInject } from "../PCLoan/PCLoanInject";
 import { PCLoanTerminate } from "../PCLoan/PCLoanTerminate";
+import { useActiveContext } from "../../utils/ActiveContext";
 
 export const RenderMap = () => {
 
@@ -119,7 +120,8 @@ export const RenderMap = () => {
 
   console.log("map_screen_terrainMaps", map_screen_terrainMaps)
 
-  const {activeComponent, setActive, interactCoord, setInteractCoord} = useMapContext();
+  const {interactCoord} = useMapContext();
+  const { activeComponent, setActive  } = useActiveContext();
   const [playerDirection, setPlayerDirection] = useState<PlayerDirection>(PlayerDirection.Up);
   const [playerImage,setPlayerImage] = useState(ethan_up);
 
@@ -129,7 +131,6 @@ export const RenderMap = () => {
   
     // ------ key inputs ------
     const press_up = () => {
-      console.log("test")
       setPlayerDirection(PlayerDirection.Up);
       setPlayerImage(ethan_up);
       crawlBy(0, -1);}
@@ -172,19 +173,8 @@ export const RenderMap = () => {
       
   return (  
         <div className="w-full relative flex flex-col">
-          {activeComponent == ActiveComponent.mapMenu ? 
-            <MapMenu/> : null}
 
           {activeComponent == ActiveComponent.team ? <TeamList /> : null}
-
-          {activeComponent == ActiveComponent.pcLoanMarket ? 
-            <PCLoanMarket/> : null}
-          
-          {activeComponent == ActiveComponent.pcLoanInject ? 
-            <PCLoanInject/> : null}
-
-          {activeComponent == ActiveComponent.pcLoanTerminate ? 
-            <PCLoanTerminate/> : null}
 
           {map_screen_terrainMaps.map((row, rowIndex) => (
             <div key={rowIndex} className="relative flex flex-row">

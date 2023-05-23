@@ -7,6 +7,7 @@ import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { Has, HasValue, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 
 import { TeamPCCard } from "./TeamPCCard";
+import { useActiveContext } from "../../utils/ActiveContext";
 
 export const TeamList = () => {
   const {
@@ -15,7 +16,7 @@ export const TeamList = () => {
     systemCalls: { pcLoan_offer, addressToBytes32 },
   } = useMUD();
 
-  const { setActive, activeComponent } = useMapContext();
+  const { setActive, activeComponent } = useActiveContext();
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [buttonSelected, setButtonSelected] = useState(false);

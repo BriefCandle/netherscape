@@ -9,56 +9,59 @@ import { useBlockNumber } from "../../utils/useBlockNumber";
 import { pcLoanSpeed, pcLoanSpeedAdjust } from "../../constant";
 import { LoadPCImage, PCImageType } from "../PCInstance/LoadPCImage";
 import { HPBar } from "../Team/TeamPCCard";
+import { useActiveContext } from "../../utils/ActiveContext";
 
-export const PCLoanInject = () => {
+export const PCLoanInject = (props: {pcIDs: any[]}) => {
 
-  const { 
-    components: { PCLoanOffer, PCInstance, PCLoanAccept },
-    network: { playerEntity },
-    systemCalls: {addressToBytes32, pcLoan_inject }
-  } = useMUD();
+  const {pcIDs} = props;
+  
+  // const { 
+  //   components: { PCLoanOffer, PCInstance, PCLoanAccept },
+  //   network: { playerEntity },
+  //   systemCalls: {addressToBytes32, pcLoan_inject }
+  // } = useMUD();
 
-  const { setActive, activeComponent } = useMapContext()
+  // const { setActive, activeComponent } = useActiveContext()
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [buttonSelected, setButtonSelected] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const pcIDs = useEntityQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity), isInjected: false})])
+  // const pcIDs = useEntityQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity), isInjected: false})])
   
   // const pcInstances = pcIDs?.map((pcID) => {return getComponentValue(PCInstance, pcID)})
   // const pcLoanAccepts = pcIDs?.map((pcID) => {return getComponentValue(PCLoanAccept, pcID)});
   
   const blockNumber = useBlockNumber();
   
-  const press_up = () => {
-    setSelectedItemIndex((selectedItemIndex)=> 
-      selectedItemIndex === 0 ? selectedItemIndex : selectedItemIndex - 1
-    )
-  }
+  // const press_up = () => {
+  //   setSelectedItemIndex((selectedItemIndex)=> 
+  //     selectedItemIndex === 0 ? selectedItemIndex : selectedItemIndex - 1
+  //   )
+  // }
 
-  const press_down = () => {
-    setSelectedItemIndex((selectedItemIndex)=> 
-      selectedItemIndex === pcIDs.length - 1 ? selectedItemIndex : selectedItemIndex + 1
-    )
-  }
+  // const press_down = () => {
+  //   setSelectedItemIndex((selectedItemIndex)=> 
+  //     selectedItemIndex === pcIDs.length - 1 ? selectedItemIndex : selectedItemIndex + 1
+  //   )
+  // }
 
-  const press_a = useCallback(async () => {
-    const pcID = pcIDs[selectedItemIndex];
-    pcLoan_inject(pcID)
-      // return setActive(ActiveComponent.map)
-  }, [press_up, press_down]);
+  // const press_a = useCallback(async () => {
+  //   const pcID = pcIDs[selectedItemIndex];
+  //   pcLoan_inject(pcID)
+  //     // return setActive(ActiveComponent.map)
+  // }, [press_up, press_down]);
 
-    const press_b = () => {
-      setActive(ActiveComponent.map);
-    }
+  //   const press_b = () => {
+  //     setActive(ActiveComponent.battle);
+  //   }
 
-    const press_left = () => { return; };
-    const press_right = () => { return; };
-    const press_start = () => { setActive(ActiveComponent.map);};
+  //   const press_left = () => { return; };
+  //   const press_right = () => { return; };
+  //   const press_start = () => { setActive(ActiveComponent.map);};
 
-  useKeyboardMovement(activeComponent == ActiveComponent.pcLoanInject, 
-    press_up, press_down, press_left, press_right, press_a, press_b, press_start)
+  // useKeyboardMovement(activeComponent == ActiveComponent.pcLoanInject, 
+  //   press_up, press_down, press_left, press_right, press_a, press_b, press_start)
 
   return (
     <>
@@ -80,7 +83,7 @@ export const PCInjectPCCard = (props: {pcID: any, blockNumber: any, selected: bo
   const { 
     components: { PCLoanOffer, PCInstance, PCLoanAccept, PCClass },
     network: { playerEntity },
-    systemCalls: {addressToBytes32, bytes32ToInteger }
+    systemCalls: {addressToBytes32, bytes32ToInteger, pcLoan_inject }
   } = useMUD();
 
   const pcInstance = getComponentValue(PCInstance, pcID)
@@ -90,6 +93,10 @@ export const PCInjectPCCard = (props: {pcID: any, blockNumber: any, selected: bo
   const pcLoanTravel = (blockNumber - Number(pcLoanAccept?.startBlock)) * pcLoanSpeed/ pcLoanSpeedAdjust;
 
   const pcArrivedIn = pcLoanTravel >= pcLoanAccept?.distance ? 0 : (pcLoanAccept?.distance - pcLoanTravel)
+
+  if (pcArrivedIn == 0) {
+    pcLoan_inject(pcID)
+  }
 
   const handleClick = () => {
     console.log();

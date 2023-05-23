@@ -41,7 +41,6 @@ export const TeamPCCard = (props:{pcInstance:any, selected: boolean, buttonSelec
   } = useMUD();
 
   const pcClass = getComponentValue(PCClass, bytes32ToInteger(pcInstance?.pcClassID) as Entity)
-  console.log("classname", pcClass?.className)
 
   const handleOffer = () => {
     console.log(selected);

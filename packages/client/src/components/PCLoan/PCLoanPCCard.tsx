@@ -16,7 +16,7 @@ export const PCLoanPCCard = (props: {pcID: any, selected: boolean, buttonSelecte
 
   const pcLoanOffer = getComponentValue(PCLoanOffer, pcID);
   const isOfferor = pcLoanOffer?.offerorID == addressToBytes32(playerEntity as Entity)
-  console.log("isOfferor", isOfferor)
+  // console.log("isOfferor", isOfferor)
   const pcInstance = getComponentValue(PCInstance, pcID);
   if (!pcInstance) return null;
   const pcClass = getComponentValue(PCClass, bytes32ToInteger(pcInstance?.pcClassID) as Entity)  
