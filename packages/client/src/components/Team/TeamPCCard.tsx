@@ -65,7 +65,7 @@ export const TeamPCCard = (props:{pcInstance:any, selected: boolean, buttonSelec
           <div className="attributes text-xs text-black font-bold flex flex-col">PP <span className="mx-auto">{pcInstance.maxPP}</span></div>
           <div className="attributes text-xs flex">
           <button 
-              className={`w-20 ml-2 px-2 pb-1 flex flex-row my-auto ${buttonSelected?"bg-rose-800":"bg-rose-600"} hover:bg-rose-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold`}
+              className={`min-w-22 ml-2 px-2 pb-1 flex flex-row my-auto ${buttonSelected?"bg-rose-800":"bg-rose-600"} hover:bg-rose-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold`}
               onClick={handleOffer}
               disabled={loading}
               >

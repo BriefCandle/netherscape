@@ -19,7 +19,7 @@ export const GameBoard = () => {
   const {
     components: { PlayerPosition, Player, BattleWith, PCLoanAccept },
     network: { playerEntity },
-    systemCalls: { spawn, addressToBytes32 },
+    systemCalls: { spawn, addressToBytes32, respawn },
   } = useMUD();
 
 
@@ -27,6 +27,9 @@ export const GameBoard = () => {
   const isAttacker = useComponentValue(BattleWith, playerEntity)?.value !== undefined;
   const isDefender = useEntityQuery([HasValue(BattleWith, {value: addressToBytes32(playerEntity as string)})]).length !== 0
   const pcIDsInject = useEntityQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity), isInjected: false})])
+
+  const playerPosition = useComponentValue(PlayerPosition, playerEntity);
+  const canReSpawn = !canSpawn && playerPosition == undefined;
 
 
   const {activeComponent, setActive} = useActiveContext();
@@ -46,7 +49,7 @@ export const GameBoard = () => {
 
 
         { canSpawn ? <button className="bg-green-500" onClick={spawn}>Spawn</button> : null}
-
+        { canReSpawn ? <button className="bg-red-500" onClick={respawn}>Respawn</button> : null}
         <div className="game h-full w-full"> 
         
           {activeComponent == ActiveComponent.pcLoanMarket ? 

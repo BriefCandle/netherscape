@@ -45,7 +45,7 @@ export const PCLoanPCCard = (props: {pcID: any, selected: boolean, buttonSelecte
           {/* <div className="attributes text-xs text-black font-bold flex flex-col">Distance <span className="mx-auto">{Number(pcLoanOffer?.duration)}</span></div> */}
           <div className="attributes text-xs flex">
           <button 
-              className={`w-20 ml-2 px-2 pb-1 flex flex-row my-auto ${buttonSelected?"bg-rose-800":"bg-rose-600"} hover:bg-rose-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold`}
+              className={`min-w-22 ml-2 px-2 pb-1 flex flex-row my-auto ${buttonSelected?"bg-rose-800":"bg-rose-600"} hover:bg-rose-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold`}
               onClick={handleClick}
               disabled={loading}
               >

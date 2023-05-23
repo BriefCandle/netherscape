@@ -76,6 +76,9 @@ contract CrawlSystem is System {
     require(!LibMap.hasPlayerPosition(player), "Respawn: player already has position");
     
     LibMap.spawnPlayerOn00(player);
+
+    bytes32 pcClassID = LibUtils.numberToEntityKey(0);
+    IWorld(_world()).netherscape_PCSystem_spawnPC(pcClassID, player);
   }
 
   // removes player's position on map

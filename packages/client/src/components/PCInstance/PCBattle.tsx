@@ -14,7 +14,7 @@ export const HPBar = (props : {hp : number | undefined, maxHP: number | undefine
       <div className="h-4 w-full overflow-hidden flex rounded-xl bg-gray-300 meter">
         <span
           style={{ width: `${props.hp / props.maxHP * 100}%` }}
-          className={`shadow-none flex flex-col text-center whitespace-nowrap text-black justify-center bg-red-400`}
+          className={`shadow-none flex flex-col text-center whitespace-nowrap text-black justify-center bg-red-400 transition-all duration-200 ease-in-out`}
         >
         </span>
       </div>

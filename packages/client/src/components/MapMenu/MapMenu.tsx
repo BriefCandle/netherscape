@@ -125,7 +125,7 @@ export const MapMenu = () => {
           border-radius: 12px;
           box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
           position: absolute; /* Add this to allow z-index */
-          z-index: 10; /* Add this to set the z-index */
+          z-index: 30; /* Add this to set the z-index */
         }
         
         .menu-item {
