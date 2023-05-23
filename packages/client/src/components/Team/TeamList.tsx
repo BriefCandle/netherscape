@@ -4,35 +4,34 @@ import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { useMapContext } from "../../utils/MapContext";
 import { useMUD } from "../../MUDContext";
 import { useComponentValue, useEntityQuery } from "@latticexyz/react";
-import { Has, HasValue, getComponentValueStrict } from "@latticexyz/recs";
+import { Has, HasValue, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 
 import { TeamPCCard } from "./TeamPCCard";
-
-const menuItems = [
-  { name: "$Siege", value: "siege" },
-  { name: "$Unsiege", value: "unsiege" }, // TODO: fix, check for siege condition and grey out
-  { name: "Team", value: "team" },
-  { name: "Item", value: "item" },
-  { name: "Logout", value: "logout" },
-];
+import { useActiveContext } from "../../utils/ActiveContext";
 
 export const TeamList = () => {
   const {
     components: { CommandedBy, PCInstance},
     network: { playerEntity },
-    systemCalls: { siege, unsiege, logout, addressToBytes32 },
+    systemCalls: { pcLoan_offer, addressToBytes32 },
   } = useMUD();
 
-  const { setActive, activeComponent } = useMapContext();
+  const { setActive, activeComponent } = useActiveContext();
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [buttonSelected, setButtonSelected] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const pcInstanceIDs = useEntityQuery([Has(PCInstance), HasValue(CommandedBy, {value:addressToBytes32(playerEntity)})]);
-  const pcInstances = pcInstanceIDs.map( (id : string) => {return  {...getComponentValueStrict(PCInstance, id), id:id };});
+  // const pcInstanceIDs = useEntityQuery([Has(PCInstance), HasValue(CommandedBy, {value:addressToBytes32(playerEntity)})]);
+  // const pcInstances = pcInstanceIDs.map( (id : string) => {return  {...getComponentValueStrict(PCInstance, id), id:id };});
+  const pcIDs = useEntityQuery([HasValue(CommandedBy, {value: addressToBytes32(playerEntity as string)})]);
+  const pcInstances = pcIDs?.map((pcID) => {
+    return getComponentValue(PCInstance, pcID)
+  })
+  
+  console.log("my pcs", pcIDs, pcInstances);
 
-  console.log("my pcs", pcInstanceIDs, pcInstances);
+  // ------- key input -------
 
   const press_up = () => {
     setButtonSelected(false);
@@ -53,10 +52,8 @@ export const TeamList = () => {
   };
 
   const press_a = useCallback(async () => {
-    const item = pcInstances[selectedItemIndex];
-    console.log(item);
-
-    buttonSelected && !loading && handleOffer(pcInstances[selectedItemIndex].id);
+    const pcID = pcIDs[selectedItemIndex];
+    buttonSelected && !loading && pcLoan_offer(pcID);
   }, [press_up, press_down]);
 
   const press_b = () => {
@@ -70,7 +67,7 @@ export const TeamList = () => {
     setButtonSelected(true);
   };
   const press_start = () => {
-    buttonSelected && !loading && handleOffer(pcInstances[selectedItemIndex].id);
+    return setActive(ActiveComponent.map)
   };
 
   useKeyboardMovement(
@@ -85,22 +82,22 @@ export const TeamList = () => {
   );
 
   
-  const handleOffer = (pcID) => {
-    setLoading(true);
-    console.log(pcID);
+  // const handleOffer = (pcID) => {
+  //   setLoading(true);
+  //   console.log(pcID);
 
-    setTimeout(() => {
-      setLoading(false);
-    },3000)
-  }
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   },3000)
+  // }
 
 
   return (
     <>
       <div className="absolute flex flex-col top-1/4 left-[30%] bg-white border-2  box-shadow-xl z-40 rounded-lg" style={{width: "27rem"}}>
 
-        {pcInstances.map((pc,i)=>(
-          <TeamPCCard pc={pc} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} loading={ selectedItemIndex==i && loading} />
+        {pcInstances.map((pcInstance,i)=>(
+          <TeamPCCard key={i} pcInstance={pcInstance} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} loading={ selectedItemIndex==i && loading} />
         ))}
 
       </div>

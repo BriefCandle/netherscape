@@ -3,24 +3,50 @@ import { useCallback, useEffect, useState } from "react";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { useMapContext } from "../../utils/MapContext";
 import { useMUD } from "../../MUDContext";
+import { useComponentValue, useEntityQuery } from "@latticexyz/react";
+import { Entity, HasValue } from "@latticexyz/recs";
+import { PCLoanInject } from "../PCLoan/PCLoanInject";
+import { useActiveContext } from "../../utils/ActiveContext";
 
 const menuItems = [
   { name: "$Siege", value: "siege"},
   { name: "$Unsiege", value: "unsiege"}, // TODO: fix, check for siege condition and grey out
   { name: "PC Loan Market", value: "pcLoan"},
   { name: "PC Loan Inject", value: "pcLoanInject"},
+  { name: "PC Loan Terminate", value: "pcLoanTerminate"},
   { name: "Team", value: "team"},
-  { name: "Item", value: "item"},
+  // { name: "Item", value: "item"},
   { name: "Logout", value: "logout"}
 ]
 
 export const MapMenu = () => {
 
-  const { systemCalls: {siege, unsiege, logout}} = useMUD();
+  const { 
+    components: { PCLoanOffer, PCLoanAccept, SiegedBy, BattleWith},
+    network: { playerEntity },
+    systemCalls: {siege, unsiege, logout,addressToBytes32}
+  } = useMUD();
 
-  const { setActive, activeComponent } = useMapContext()
+  const { setActive, activeComponent } = useActiveContext()
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
+
+  const isAttacker = useComponentValue(BattleWith, playerEntity)?.value !== undefined;
+  const isDefender = useEntityQuery([HasValue(BattleWith, {value: addressToBytes32(playerEntity as string)})]).length !== 0
+
+  const isSieging = useEntityQuery([HasValue(SiegedBy, {value: addressToBytes32(playerEntity as Entity)})]).length !=0;
+
+  const isAcceptor = useEntityQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity), isInjected: false})]).length != 0;
+  const isOfferee = useEntityQuery([HasValue(PCLoanAccept, {offerorID: addressToBytes32(playerEntity as Entity), isInjected: true})]).length != 0;
+
+  let menuItems_update = menuItems;
+  if (isSieging) {
+    menuItems_update = menuItems_update.filter((obj) => obj.value !== "siege")
+  } else {
+    menuItems_update = menuItems_update.filter((obj) => obj.value !== "unsiege")
+  }
+  if (!isAcceptor) menuItems_update = menuItems_update.filter((obj) => obj.value !== "pcLoanInject")
+  if (!isOfferee) menuItems_update = menuItems_update.filter((obj) => obj.value != "pcLoanTerminate")
 
   const press_up = () => {
     setSelectedItemIndex((selectedItemIndex)=> 
@@ -30,12 +56,12 @@ export const MapMenu = () => {
 
   const press_down = () => {
     setSelectedItemIndex((selectedItemIndex)=> 
-      selectedItemIndex === menuItems.length - 1 ? selectedItemIndex : selectedItemIndex + 1
+      selectedItemIndex === menuItems_update.length - 1 ? selectedItemIndex : selectedItemIndex + 1
     )
   }
 
    const press_a = useCallback(async () => {
-      const item = menuItems[selectedItemIndex];
+      const item = menuItems_update[selectedItemIndex];
       switch (item.value) {
         case "siege":
           siege();
@@ -44,12 +70,13 @@ export const MapMenu = () => {
           unsiege();
           return setActive(ActiveComponent.map);        
         case "team":
-          setActive(ActiveComponent.team);
-          return console.log("team")
+          return setActive(ActiveComponent.team);
         case "pcLoan":
-          return setActive(ActiveComponent.pcLoan)
+          return setActive(ActiveComponent.pcLoanMarket)
         case "pcLoanInject":
             return setActive(ActiveComponent.pcLoanInject)
+        case "pcLoanTerminate":
+            return setActive(ActiveComponent.pcLoanTerminate)
         case "item":
           return console.log("Item");
         case "logout":
@@ -64,7 +91,10 @@ export const MapMenu = () => {
 
     const press_left = () => { return; };
     const press_right = () => { return; };
-    const press_start = () => { setActive(ActiveComponent.map);};
+    const press_start = () => { 
+      if (isAttacker || isDefender) setActive(ActiveComponent.battle)
+      else setActive(ActiveComponent.map)
+    };
 
   useKeyboardMovement(activeComponent == ActiveComponent.mapMenu, 
     press_up, press_down, press_left, press_right, press_a, press_b, press_start)
@@ -73,7 +103,7 @@ export const MapMenu = () => {
   return (
     <>
       <div className="menu">
-        {menuItems.map((item, index) => (
+        {menuItems_update.map((item, index) => (
           <div 
             key={item.value}
             className={`menu-item ${index === selectedItemIndex ? "selected" : ""}`}

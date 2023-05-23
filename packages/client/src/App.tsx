@@ -3,6 +3,7 @@ import { SyncState } from "@latticexyz/network";
 import { useMUD } from "./MUDContext";
 import { GameBoard } from "./GameBoard";
 import "./assets/css/tailwind.css";
+import { ActiveProvider } from "./utils/ActiveContext";
 
 export const App = () => {
   const {
@@ -25,7 +26,9 @@ export const App = () => {
           {loadingState.msg} ({Math.floor(loadingState.percentage)}%)
         </div>
       ) : (
-        <GameBoard />
+        <ActiveProvider>
+                  <GameBoard />
+        </ActiveProvider>
       )}
     </div>
   );

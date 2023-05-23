@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useKeyboardMovement } from "../../utils/useKeyboardMovement";
 import { useMapContext } from "../../utils/MapContext";
 import { useMUD } from "../../MUDContext";
+import { useActiveContext } from "../../utils/ActiveContext";
 
 const menuItems = [
   { name: "$Siege", value: "siege"},
@@ -16,7 +17,7 @@ export const OfferModal = (props: {show: boolean}) => {
 
   const { systemCalls: {siege, unsiege, logout}} = useMUD();
 
-  const { setActive, activeComponent } = useMapContext()
+  const { setActive, activeComponent } = useActiveContext()
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
 

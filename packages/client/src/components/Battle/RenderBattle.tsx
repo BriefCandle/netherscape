@@ -6,6 +6,7 @@ import { PCImageType } from "../PCInstance/LoadPCImage";
 import { PCAttack, PCBattle } from "../PCInstance/PCBattle";
 import { ActiveComponent } from "../../utils/useActiveComponent";
 import { Entity, getComponentValueStrict } from "@latticexyz/recs";
+import { useActiveContext } from "../../utils/ActiveContext";
 
 export const RenderBattle = () => {
 
@@ -23,8 +24,12 @@ export const RenderBattle = () => {
   const [enemyPCIndex, setEnemyPCIndex] = useState(0);
   const [pcAttackIDs, setPCAttackIDs] = useState([""]);
   const [attackIDIndex, setAttackIDIndex] = useState(0);
-  const [activeComponent, setActive] = useState(ActiveComponent.battle);
 
+  const {activeComponent, setActive} = useActiveContext();
+  
+  useEffect(() => {
+    setActive(ActiveComponent.battle);
+  },[]);
   // console.log("attack PC", player_pcIDs[playerPCIndex])
   // console.log("attack ID", pcAttackIDs[attackIDIndex])
 
@@ -53,7 +58,7 @@ export const RenderBattle = () => {
       if(playerPCIndex == player_pcIDs.length){
         //reinforce
         console.log("reinforce");
-        // return setActive(ActiveComponent.battlePlayerPCSelected);
+        return setActive(ActiveComponent.pcLoanMarket)
       }
       else{
         const pcID = player_pcIDs[playerPCIndex];
@@ -93,7 +98,7 @@ export const RenderBattle = () => {
   }, [activeComponent])
 
   // TODO?: bring up the market info
-  const press_start = () => { return; };
+  const press_start = () => { return setActive(ActiveComponent.pcLoanMarket) };
 
   useKeyboardMovement(true, 
     press_up, press_down, press_left, press_right, press_a, press_b, press_start)

@@ -11,64 +11,60 @@ import { LoadPCImage, PCImageType } from "../PCInstance/LoadPCImage";
 import { HPBar } from "../Team/TeamPCCard";
 import { useActiveContext } from "../../utils/ActiveContext";
 
-export const PCLoanInject = (props: {pcIDs: any[]}) => {
+export const PCLoanTerminate = () => {
 
-  const {pcIDs} = props;
-  
-  // const { 
-  //   components: { PCLoanOffer, PCInstance, PCLoanAccept },
-  //   network: { playerEntity },
-  //   systemCalls: {addressToBytes32, pcLoan_inject }
-  // } = useMUD();
+  const { 
+    components: { PCLoanOffer, PCInstance, PCLoanAccept },
+    network: { playerEntity },
+    systemCalls: {addressToBytes32, pcLoan_terminate }
+  } = useMUD();
 
-  // const { setActive, activeComponent } = useActiveContext()
+  const { setActive, activeComponent } = useActiveContext()
 
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [buttonSelected, setButtonSelected] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // const pcIDs = useEntityQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity), isInjected: false})])
-  
-  // const pcInstances = pcIDs?.map((pcID) => {return getComponentValue(PCInstance, pcID)})
-  // const pcLoanAccepts = pcIDs?.map((pcID) => {return getComponentValue(PCLoanAccept, pcID)});
+  // loaned out pc that could be closed (not considering duration)
+  const pcIDs = useEntityQuery([HasValue(PCLoanAccept, {offerorID: addressToBytes32(playerEntity as Entity), isInjected: true})])
   
   const blockNumber = useBlockNumber();
   
-  // const press_up = () => {
-  //   setSelectedItemIndex((selectedItemIndex)=> 
-  //     selectedItemIndex === 0 ? selectedItemIndex : selectedItemIndex - 1
-  //   )
-  // }
+  const press_up = () => {
+    setSelectedItemIndex((selectedItemIndex)=> 
+      selectedItemIndex === 0 ? selectedItemIndex : selectedItemIndex - 1
+    )
+  }
 
-  // const press_down = () => {
-  //   setSelectedItemIndex((selectedItemIndex)=> 
-  //     selectedItemIndex === pcIDs.length - 1 ? selectedItemIndex : selectedItemIndex + 1
-  //   )
-  // }
+  const press_down = () => {
+    setSelectedItemIndex((selectedItemIndex)=> 
+      selectedItemIndex === pcIDs.length - 1 ? selectedItemIndex : selectedItemIndex + 1
+    )
+  }
 
-  // const press_a = useCallback(async () => {
-  //   const pcID = pcIDs[selectedItemIndex];
-  //   pcLoan_inject(pcID)
-  //     // return setActive(ActiveComponent.map)
-  // }, [press_up, press_down]);
+  const press_a = useCallback(async () => {
+    const pcID = pcIDs[selectedItemIndex];
+    pcLoan_terminate(pcID)
+      // return setActive(ActiveComponent.map)
+  }, [press_up, press_down]);
 
-  //   const press_b = () => {
-  //     setActive(ActiveComponent.battle);
-  //   }
+    const press_b = () => {
+      setActive(ActiveComponent.map);
+    }
 
-  //   const press_left = () => { return; };
-  //   const press_right = () => { return; };
-  //   const press_start = () => { setActive(ActiveComponent.map);};
+    const press_left = () => { return; };
+    const press_right = () => { return; };
+    const press_start = () => { setActive(ActiveComponent.map);};
 
-  // useKeyboardMovement(activeComponent == ActiveComponent.pcLoanInject, 
-  //   press_up, press_down, press_left, press_right, press_a, press_b, press_start)
+  useKeyboardMovement(activeComponent == ActiveComponent.pcLoanTerminate, 
+    press_up, press_down, press_left, press_right, press_a, press_b, press_start)
 
   return (
     <>
       <div className="absolute flex flex-col top-1/4 left-[30%] bg-white border-2  box-shadow-xl z-40 rounded-lg" style={{width: "27rem"}}>
-      <div className="name text-lg bg-black">PCs to be injected:</div>
+      <div className="name text-lg bg-black">PC loan to be terminated:</div>
         {pcIDs.map((pcID,i)=>(
-          <PCInjectPCCard key={i} pcID={pcID} blockNumber={blockNumber} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} loading={ selectedItemIndex==i && loading} />
+          <PCTerminatePCCard key={i} pcID={pcID} blockNumber={blockNumber} selected={selectedItemIndex==i} buttonSelected={selectedItemIndex==i && buttonSelected} loading={ selectedItemIndex==i && loading} />
       ))}
       </div>
     </>
@@ -77,30 +73,26 @@ export const PCLoanInject = (props: {pcIDs: any[]}) => {
 
 
 
-export const PCInjectPCCard = (props: {pcID: any, blockNumber: any, selected: boolean, buttonSelected: boolean, loading: boolean}) => {
+export const PCTerminatePCCard = (props: {pcID: any, blockNumber: any, selected: boolean, buttonSelected: boolean, loading: boolean}) => {
   const { pcID, blockNumber, selected, buttonSelected, loading } = props;
 
   const { 
     components: { PCLoanOffer, PCInstance, PCLoanAccept, PCClass },
     network: { playerEntity },
-    systemCalls: {addressToBytes32, bytes32ToInteger, pcLoan_inject }
+    systemCalls: {addressToBytes32, bytes32ToInteger }
   } = useMUD();
 
   const pcInstance = getComponentValue(PCInstance, pcID)
   if (!pcInstance) return null;
   const pcClass = getComponentValue(PCClass, bytes32ToInteger(pcInstance?.pcClassID) as Entity)  
   const pcLoanAccept = getComponentValue(PCLoanAccept, pcID)
-  const pcLoanTravel = (blockNumber - Number(pcLoanAccept?.startBlock)) * pcLoanSpeed/ pcLoanSpeedAdjust;
-
-  const pcArrivedIn = pcLoanTravel >= pcLoanAccept?.distance ? 0 : (pcLoanAccept?.distance - pcLoanTravel)
-
-  if (pcArrivedIn == 0) {
-    pcLoan_inject(pcID)
-  }
+  
+  const blocksLeft = Number(pcLoanAccept?.startBlock + pcLoanAccept.duration) - blockNumber;
+  const blocksToTerminate = blocksLeft >= 0? blocksLeft : 0;
+  // console.log("blocksToTerminate", blocksToTerminate)
 
   const handleClick = () => {
     console.log();
-    
   }
 
   return (
@@ -127,7 +119,7 @@ export const PCInjectPCCard = (props: {pcID: any, blockNumber: any, selected: bo
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>)}
-            {!loading && (pcArrivedIn == 0 ? "$Inject" : pcArrivedIn )}
+            {!loading && (blocksLeft <= 0 ? "$Terminate" : blocksLeft )}
           </button>
           </div>
         </div>

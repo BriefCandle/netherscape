@@ -185,7 +185,7 @@ export function createSystemCalls(
     try {
       const wrappedBytes32 = ethers.utils.hexZeroPad(0, 32);
       const offereeID = wrappedBytes32
-      const duration = 100000;
+      const duration = 100;
       const interestRate = 0;
       const tx = await worldSend("netherscape_PCLoanSystem_offer", [pcID, offereeID, duration, interestRate]);
       await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);

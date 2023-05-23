@@ -135,7 +135,7 @@ export const PPLeft = (props: {currentPP: number, maxPP: number}) => {
   const filledPerimeter = perimeter * progress;
 
   const offset = parseInt(2*Math.PI*50*(1-6/100));
-  console.log(offset)
+  // console.log(offset)
 
 
   return (
