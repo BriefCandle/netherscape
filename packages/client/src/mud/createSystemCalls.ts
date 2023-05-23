@@ -145,6 +145,17 @@ export function createSystemCalls(
   
   }
 
+  const respawn = async() => {
+
+    try {
+      const tx = await worldSend("netherscape_CrawlSystem_respawn", []);
+      await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
+    } finally {
+      console.log("respawn succesffully")
+    }
+  
+  }
+
   const siege = async() => {
     try {
       const tx = await worldSend("netherscape_SiegeSystem_siege", []);
@@ -252,6 +263,7 @@ export function createSystemCalls(
 
   return {
     spawn,
+    respawn,
     crawlBy,
     wrapParcel2Map,
     siege,

@@ -117,9 +117,9 @@ export const PCInjectPCCard = (props: {pcID: any, blockNumber: any, selected: bo
       <div className="hp-attrs flex flex-col grow ml-3 my-auto">
         <HPBar hp={pcInstance.currentHP} maxHP={pcInstance.maxHP} />
         <div className="flex flex-row justify-between mt-2">
-          <div className="attributes text-xs flex">
+          <div className="attributes text-xs flex w-full">
           <button 
-              className={`w-20 ml-2 px-2 pb-1 flex flex-row my-auto ${buttonSelected?"bg-rose-800":"bg-rose-600"} hover:bg-rose-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold`}
+              className={`min-w-24 px-2 pb-1 flex flex-row my-auto ml-auto ${buttonSelected?"bg-rose-800":"bg-rose-600"} hover:bg-rose-700 transition ease-in-out delay-75 text-white rounded text-sm font-semibold`}
               onClick={handleClick}
               disabled={loading}
               >
