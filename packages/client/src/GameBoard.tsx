@@ -29,9 +29,7 @@ export const GameBoard = () => {
   const pcIDsInject = useEntityQuery([HasValue(PCLoanAccept, {acceptorID: addressToBytes32(playerEntity as Entity), isInjected: false})])
 
   const playerPosition = useComponentValue(PlayerPosition, playerEntity);
-
   const canReSpawn = !canSpawn && playerPosition == undefined;
-  console.log("aaa", playerPosition)
 
 
   const {activeComponent, setActive} = useActiveContext();
