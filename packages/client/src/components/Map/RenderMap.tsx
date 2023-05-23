@@ -8,6 +8,12 @@ import ethan_down from "../../assets/player/ethan_down.png";
 import ethan_left from "../../assets/player/ethan_left.png";
 import ethan_right from "../../assets/player/ethan_right.png";
 
+import other_up from "../../assets/player/other_up.gif";
+import other_down from "../../assets/player/other_down.gif";
+import other_left from "../../assets/player/other_left.gif";
+import other_right from "../../assets/player/other_right.gif";
+
+
 
 
 import { ParcelType, TerrainType, NodeType, parcel_width, parcel_height, map_width, map_height, max_width, max_height, Coord, terrain_width, terrain_height } from "../../constant";
@@ -189,7 +195,7 @@ export const RenderMap = () => {
                     otherPlayers.map((otherPlayer) => {
                       const {parcel_x, parcel_y, parcel2map_x, parcel2map_y} = coordMapToParcel(otherPlayer.position.x, otherPlayer.position.y);
                       if(parcel2map_x == terrainInfo.coord.x && parcel2map_y == terrainInfo.coord.y)
-                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} playerImage={ethan_down}/>)
+                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} playerImage={other_down}/>)
                       return null;
                     })
                   }
