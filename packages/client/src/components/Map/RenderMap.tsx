@@ -2,6 +2,7 @@ import { useComponentValue, useEntityQuery } from "@latticexyz/react";
 import { Entity, Has, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { ethers } from 'ethers';
 import { useMUD } from "../../MUDContext";
+import { useRef } from "react";
 
 import ethan_up from "../../assets/player/ethan_up.png";
 import ethan_down from "../../assets/player/ethan_down.png";
@@ -49,6 +50,16 @@ export const RenderMap = () => {
       };
   });
 
+   // ------ makes player always center of the map ------
+   const mapRef = useRef(null);
+   useEffect(() => {
+     if (playerPosition){      
+       const mapContainer: any = mapRef.current;
+       // apply the transform to the map
+       mapContainer?.style.setProperty('transform', `translate(-${parcel_x * 40}px, -${parcel_y * 40}px)`);}
+   }, [playerPosition]);
+
+
   console.log('---- other players ----')
   console.log(otherPlayers)
 
@@ -88,8 +99,8 @@ export const RenderMap = () => {
   }
 
   const map_screen: Coord[][] = [];
-  const screen_width = 5;
-  const screen_height = 3;
+  const screen_width = 7;
+  const screen_height = 5;
   for (let j = 0; j < screen_height; j++) {
     map_screen[j] = [];
     for (let i = 0; i< screen_width; i++) {
@@ -172,7 +183,7 @@ export const RenderMap = () => {
 
       
   return (  
-        <div className="w-full relative flex flex-col">
+        <div className="w-full relative flex flex-col" ref={mapRef} style={{width: "1000px", height:"600px", left:"-200px", top: "-200px"}}>
 
           {activeComponent == ActiveComponent.team ? <TeamList /> : null}
 
