@@ -50,7 +50,7 @@ export const GameBoard = () => {
 
         { canSpawn ? <button className="bg-green-500" onClick={spawn}>Spawn</button> : null}
         { canReSpawn ? <button className="bg-red-500" onClick={respawn}>Respawn</button> : null}
-        <div className="game h-full w-full"> 
+        <div className="game h-full w-full overflow-hidden"> 
         
           {activeComponent == ActiveComponent.pcLoanMarket ? 
             <PCLoanMarket/> : null}
