@@ -31,9 +31,9 @@ export const LoadPCImage = (props: {classIndex: string | undefined, imageType: P
   // }, [])
 
   return (
-    <div className="my-2 flex">
+    <div className="my-2 flex w-32 overflow-hidden">
       {imageSrc ? (
-        <img src={imageSrc} alt="Example" className="w-32" />
+        <img src={imageSrc} alt="Example" className="" />
       ) : (
         <p className="text-yellow-500 mx-2">Loading image...</p>
       )}
