@@ -36,7 +36,7 @@ export const PCAttack = (props: {attackID: string, selected: boolean}) => {
   const attackType = getComponentValueStrict(AttackClass, attackKey as Entity).attackType
 
   return (
-    <div className="mx-1 my-1">
+    <div className="mx-1 my-1 mt-10">
     <div className={`${selected? "bg-gray-400" : ""} transition-all duration-200 ease-in-out`}>
     <div className="flex flex-row">
     <div className="flex">
@@ -139,7 +139,7 @@ export const PPLeft = (props: {currentPP: number, maxPP: number}) => {
 
 
   return (
-    <svg className="w-12 h-12" >
+    <svg className="w-12 h-12 z-10" >
 
         <circle 
           cx="24" 
