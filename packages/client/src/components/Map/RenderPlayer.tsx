@@ -25,15 +25,20 @@ export const getInteractCoord = (coord: {x: number, y: number}, direction: Playe
 
 
 
-export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPosition: any,playerImage:any}) => {
-  const {parcel_x, parcel_y, playerPosition, playerImage} = props;
+export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPosition: any,playerImage:any,name:string}) => {
+  const {parcel_x, parcel_y, playerPosition, playerImage,name} = props;
   // console.log(parcel_x, parcel_y, playerPosition)
-  const {x, y} = playerPosition;
+  const {x, y} = playerPosition; 
 
- 
-
- 
-
+  let nameStyle = {color:'yellow',fontSize:20,WebkitTextStrokeColor:'black',WebkitTextStrokeWidth:1}
+  let showName = name
+  if(name.slice(-2)!='me') {  
+    nameStyle = {color:'white',fontSize:20,WebkitTextStrokeColor:'black',WebkitTextStrokeWidth:1}
+    showName = showName.slice(2,8)
+  }else {
+    showName = showName.slice(2,8)
+  }
+    
   return (
   <>
     <div 
@@ -44,6 +49,8 @@ export const RenderPlayer = (props: {parcel_x:number, parcel_y:number, playerPos
         width: terrain_width, height: terrain_height,
     }}>
       <img style={{width: '45px', height: "35px"}} src={playerImage} alt="" />
+
+      <div style={nameStyle} > {showName} </div>
     </div> 
   </>
   )

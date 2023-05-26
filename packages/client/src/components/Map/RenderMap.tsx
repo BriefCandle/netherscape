@@ -187,18 +187,22 @@ export const RenderMap = () => {
               {row.map((terrainInfo, columnIndex) => (
                 <div key={columnIndex} 
                 className="relative flex flex-row">
-                  {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
-                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} playerImage={playerImage} />
-                    : null}
-
                   {
                     otherPlayers.map((otherPlayer) => {
                       const {parcel_x, parcel_y, parcel2map_x, parcel2map_y} = coordMapToParcel(otherPlayer.position.x, otherPlayer.position.y);
                       if(parcel2map_x == terrainInfo.coord.x && parcel2map_y == terrainInfo.coord.y)
-                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} playerImage={other_down}/>)
+
+                        return (<RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={otherPlayer.position} playerImage={other_down}  name={otherPlayer.entity.toString()}/>)
                       return null;
                     })
                   }
+
+
+                  {playerPosition && rowIndex === Math.floor(screen_height / 2) && columnIndex === Math.floor(screen_width / 2) ?
+                    <RenderPlayer parcel_x={parcel_x} parcel_y={parcel_y} playerPosition={playerPosition} playerImage={playerImage} name={playerEntity?.toString()+'me'} />
+                    : null}
+
+                  
 
                   <RenderParcel rowIndex={rowIndex} columnIndex={columnIndex} terrainInfo={terrainInfo} />
                 </div>
