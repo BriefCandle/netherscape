@@ -90,9 +90,10 @@ export const PCInjectPCCard = (props: {pcID: any, blockNumber: any, selected: bo
   if (!pcInstance) return null;
   const pcClass = getComponentValue(PCClass, bytes32ToInteger(pcInstance?.pcClassID) as Entity)  
   const pcLoanAccept = getComponentValue(PCLoanAccept, pcID)
-  const pcLoanTravel = (blockNumber - Number(pcLoanAccept?.startBlock)) * pcLoanSpeed/ pcLoanSpeedAdjust;
+  const pcLoanRequiredBlock = Math.floor(pcLoanAccept?.distance / (pcLoanSpeed/ pcLoanSpeedAdjust))
+  const pcLoanTraveledBlock = (blockNumber - Number(pcLoanAccept?.startBlock));
 
-  const pcArrivedIn = pcLoanTravel >= pcLoanAccept?.distance ? 0 : (pcLoanAccept?.distance - pcLoanTravel)
+  const pcArrivedIn = pcLoanTraveledBlock >= pcLoanRequiredBlock ? 0 : (pcLoanRequiredBlock - pcLoanTraveledBlock)
 
   if (pcArrivedIn == 0) {
     pcLoan_inject(pcID)

@@ -17,7 +17,7 @@ import { LibMap } from "./LibMap.sol";
 // BattleWith Table: attacker -> defender
 library LibPCLoan { 
 
-  uint256 constant speed = 30;
+  uint256 constant speed = 50;
   uint256 constant speedAdjust = 10;
 
   function isPCLoanOffered(bytes32 pcID) internal view returns (bool) {

@@ -136,6 +136,6 @@ export type Coord = {
 
 export const spdAdjust = 10;
 
-export const pcLoanSpeed = 30
+export const pcLoanSpeed = 50
 
 export const pcLoanSpeedAdjust = 10;

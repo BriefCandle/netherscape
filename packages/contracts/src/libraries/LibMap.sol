@@ -114,12 +114,11 @@ library LibMap {
     parcelID = hashParcelID(parcel2map_x, parcel2map_y);
   }
 
-
   function distance(uint16 from_x, uint16 from_y, uint16 to_x, uint16 to_y) internal pure returns (uint16) {
     uint16 deltaX = from_x > to_x ? from_x - to_x : to_x - from_x;
     uint16 deltaY = from_y > to_y ? from_y - to_y : to_y - from_y;
-    if (deltaX == max_width - 1) deltaX = 1; // works when combined with isWithinBoundary
-    if (deltaY == max_height - 1) deltaY = 1;
+    if (deltaX > max_width / 2) deltaX = max_width - deltaX; // works when coord isWithinBoundary
+    if (deltaY > max_height / 2) deltaY = max_height - deltaY;
     return deltaX + deltaY;
   }
 
